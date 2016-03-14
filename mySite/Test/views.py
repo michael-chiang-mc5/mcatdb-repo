@@ -5,25 +5,29 @@ from django.core.urlresolvers import reverse
 from MCEditor.views import editor
 from MCBase.views import *
 
-def index(request):
-    context = {}
-    return render(request, 'Test/index.html', context)
-
 def passageList(request):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     passages = Passage.objects.all()
     context = {'passages':passages}
     return render(request, 'Test/passageList.html', context)
 def passageDetail(request,passage_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     passage = Passage.objects.get(pk=passage_pk)
     questions = passage.question_set.all()
     context = {'passage':passage,'questions':questions}
     return render(request, 'Test/passageDetail.html', context)
 
 def standaloneQuestionList(request):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     questions = Question.objects.exclude(passage__isnull=False)
     context = {'questions':questions}
     return render(request, 'Test/questionList.html', context)
 def questionDetail(request,question_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     question = Question.objects.get(pk=question_pk)
     answers = Answer.objects.filter(question=question)
     try:
@@ -34,19 +38,23 @@ def questionDetail(request,question_pk):
     context = {'passage':passage, 'question':question, 'answers':answers, 'tags':tags}
     return render(request, 'Test/questionDetail.html', context)
 def questionUserView(request,question_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     question = Question.objects.get(pk=question_pk)
     passage = question.passage
     context = {'passage':passage,'question':question}
     return render(request, 'Test/questionUserView.html', context)
 
-
-
 def adminPanel(request):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     context = {}
     return render(request, 'Test/adminPanel.html', context)
 
 # Methods to add and edit passages
 def addPassageEditor(request):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:addPassage')
     form_data = {}
     header = "Add a passage"
@@ -54,11 +62,15 @@ def addPassageEditor(request):
     html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
     return html
 def addPassage(request):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     form_text = request.POST.get("form-text")
     passage = Passage(text=form_text)
     passage.save()
     return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage.pk]) )
 def editPassageEditor(request,passage_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:editPassage',args=[passage_pk])
     form_data = {}
     header = "Edit a passage"
@@ -69,6 +81,8 @@ def editPassageEditor(request,passage_pk):
     html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
     return html
 def editPassage(request,passage_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     form_text = request.POST.get("form-text")
     passage = Passage.objects.get(pk=passage_pk)
     passage.text = form_text
@@ -77,6 +91,8 @@ def editPassage(request,passage_pk):
 
 # Methods to add and edit questions
 def addQuestionEditor(request,passage_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:addQuestion')
     form_data = serialize_json({'passage_pk':passage_pk,})
     header = "Add a question"
@@ -84,6 +100,8 @@ def addQuestionEditor(request,passage_pk):
     html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
     return html
 def addQuestion(request):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     # get question text
     form_text = request.POST.get("form-text")
     question = Question(text=form_text)
@@ -97,6 +115,8 @@ def addQuestion(request):
     question.save()
     return HttpResponseRedirect( reverse('Test:questionDetail',args=[question.pk]) )
 def editQuestionEditor(request,question_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:editQuestion',args=[question_pk])
     form_data = {}
     header = "Edit a question"
@@ -107,6 +127,8 @@ def editQuestionEditor(request,question_pk):
     html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
     return html
 def editQuestion(request,question_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     # get question text
     form_text = request.POST.get("form-text")
     question = Question.objects.get(pk=question_pk)
@@ -117,6 +139,8 @@ def editQuestion(request,question_pk):
 
 # Methods to add and edit answers
 def addAnswerEditor(request,question_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:addAnswer')
     form_data = serialize_json({'question_pk':question_pk,})
     header = "Add an answer"
@@ -124,6 +148,8 @@ def addAnswerEditor(request,question_pk):
     html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
     return html
 def addAnswer(request):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     # get answer text
     form_text = request.POST.get("form-text")
     answer = Answer(text=form_text)
@@ -136,6 +162,8 @@ def addAnswer(request):
     answer.save()
     return HttpResponseRedirect( reverse('Test:questionDetail',args=[question_pk]) )
 def editAnswerEditor(request,answer_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:editAnswer',args=[answer_pk])
     form_data = {}
     header = "Edit an answer"
@@ -146,6 +174,8 @@ def editAnswerEditor(request,answer_pk):
     html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
     return html
 def editAnswer(request,answer_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     # get answer text
     form_text = request.POST.get("form-text")
     answer = Answer.objects.get(pk=answer_pk)
@@ -154,6 +184,8 @@ def editAnswer(request,answer_pk):
     answer.save()
     return HttpResponseRedirect( reverse('Test:questionDetail',args=[answer.question.pk]) )
 def editExplanationEditor(request,answer_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:editExplanation',args=[answer_pk])
     form_data = {}
     header = "Edit an explanation"
@@ -164,6 +196,8 @@ def editExplanationEditor(request,answer_pk):
     html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
     return html
 def editExplanation(request,answer_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     # get answer text
     form_text = request.POST.get("form-text")
     answer = Answer.objects.get(pk=answer_pk)
@@ -174,17 +208,23 @@ def editExplanation(request,answer_pk):
 
 
 def markAnswerCorrect(request,answer_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     answer = Answer.objects.get(pk=answer_pk)
     answer.correct = True
     answer.save()
     return HttpResponseRedirect( reverse('Test:questionDetail',args=[answer.question.pk]) )
 def markAnswerIncorrect(request,answer_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     answer = Answer.objects.get(pk=answer_pk)
     answer.correct = False
     answer.save()
     return HttpResponseRedirect( reverse('Test:questionDetail',args=[answer.question.pk]) )
 
 def addTag(request,question_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     text = request.POST.get("tag-text")
     Tag.newTag(text)
     tag = Tag.objects.get(text=text)
@@ -192,6 +232,8 @@ def addTag(request,question_pk):
     tag.questions.add(question)
     return editTags(request,question_pk)
 def removeTag(request,question_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     text = request.POST.get("tag-text")
     tag = Tag.objects.get(text=text)
     question = Question.objects.get(pk=question_pk)
@@ -199,6 +241,8 @@ def removeTag(request,question_pk):
     tag.save()
     return editTags(request,question_pk)
 def editTags(request,question_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     question = Question.objects.get(pk=question_pk)
     tags = question.tags.all()
     allTags = Tag.objects.all()
