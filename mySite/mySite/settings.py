@@ -26,7 +26,7 @@ DEBUG = False
 from mySite.secret_keys_and_passwords import *
 SECRET_KEY = django_secret_key
 
-ALLOWED_HOSTS = ['.michael-chiang.com','127.0.0.1','104.131.145.75']
+ALLOWED_HOSTS = ['.mcatDB.com','127.0.0.1','104.131.145.75']
 
 # Application definition
 
