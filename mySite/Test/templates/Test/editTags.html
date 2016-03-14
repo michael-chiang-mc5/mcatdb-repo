@@ -1,0 +1,68 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'Test/css/admin.css' %}">
+{% endblock %}
+
+{% block title %}
+  question list
+{% endblock %}
+
+{% block body_block %}
+  <div class="box">
+    <div class="date">
+      {{ question.time|date:'F j, Y' }}
+    </div>
+
+    <div>
+      {{ question|safe }}
+    </div>
+
+    <div class="footer">
+      [<a href="{% url 'Test:editQuestionEditor' question.pk %}">edit</a>] &nbsp;
+      [<a href="{% url 'Test:questionDetail' question.pk %}"]>back to question/answer</a>]
+    </div>
+
+
+  </div>
+
+  <hr />
+  Current tags:
+  <div>
+    {% for tag in tags %}
+      {{ tag }} &nbsp;
+    {% endfor %}
+  </div>
+  <hr />
+
+  <!-- list of all possible tags -->
+  Possible tags:
+  <div>
+    {% for tag in allTags %}
+      {{ tag }} &nbsp;
+    {% endfor %}
+  </div>
+
+  <!-- add/remove tags -->
+  <hr />
+  <form role="form" action="{% url 'Test:addTag' question.pk %}" method=POST>
+    <!-- POST data -->
+    {% csrf_token %}
+    <input type="text" name="tag-text">
+    <input type="submit" value="add tag">
+  </form>
+  <form role="form" action="{% url 'Test:removeTag' question.pk %}" method=POST>
+    <!-- POST data -->
+    {% csrf_token %}
+    <input type="text" name="tag-text">
+    <input type="submit" value="remove tag">
+  </form>
+
+
+
+
+
+
+
+{% endblock %}

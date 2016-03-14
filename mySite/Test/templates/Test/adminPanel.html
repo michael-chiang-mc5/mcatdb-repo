@@ -1,0 +1,21 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'Test/css/admin.css' %}">
+{% endblock %}
+
+{% block title %}
+  admin panel
+{% endblock %}
+
+{% block body_block %}
+  <div>
+    <a href="{% url 'Test:passageList' %}">Edit passages</a>
+    <br />
+    <a href="{% url 'Test:standaloneQuestionList' %}">Edit standalone questions</a>
+    <br />
+    
+  </div>
+
+{% endblock %}

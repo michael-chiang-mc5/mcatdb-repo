@@ -1,0 +1,115 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'myContent/css/publications.css' %}">
+{% endblock %}
+
+{% block title %}
+  publications
+{% endblock %}
+
+{% block body_block %}
+
+<div class="content">
+  <div class="page-header">Peer-reviewed publications (accepted)</div>
+
+  <!-- bmc biology paper -->
+  <div class="pub-title">
+    Control of C. elegans germline stem cell cycling speed meets
+    requirements of design to minimize mutation accumulation.
+  </div>
+  <div class="pub-source">
+    <strong>Michael Chiang</strong>, Amanda Cinquin, Adrian Paz, Edward Meeds,
+    Christopher A. Price, Max Welling, and Olivier Cinquin.
+    <br />
+    BMC Biology 2015; 13(1):51. DOI: 10.1186/s12915-015-0148-y.
+  </div>
+  <div class="pub-link">
+    [<a href="{% static 'myContent/pubs/chiang-bmc_biol.pdf' %}">pdf</a>] &nbsp;
+    [<a href="http://www.ncbi.nlm.nih.gov/pubmed/26187634">pubmed</a>] &nbsp;
+    [<a href="{% url 'Blog:index' %}#e1">Explain Like I'm Five</a>] &nbsp;
+  </div>
+
+  <!-- bmc bioinformatics technique paper -->
+  <div class="pub-title">
+    Analysis of in vivo single cell behavior by high throughput,
+    human-in-the-loop segmentation of three-dimensional images.
+  </div>
+  <div class="pub-source">
+    <strong>Michael Chiang</strong>, Sam Hallman, Amanda Cinquin, Nabora Reyes de Mochel,
+    Adrian Paz, Shimako Kawauchi, Anne L. Calof, Ken W. Cho, Charless C. Fowlkes
+    and Olivier Cinquin.
+    <br />
+    BMC Bioinformatics 2015; 16:397. DOI: 10.1186/s12859-015-0814-7
+  </div>
+  <div class="pub-link">
+    [<a href="{% static 'myContent/pubs/chiang-bmc_bioinformatics.pdf' %}">pdf</a>] &nbsp;
+    [<a href="http://www.ncbi.nlm.nih.gov/pubmed/26607933/">pubmed</a>] &nbsp;
+  </div>
+
+  <!-- ted's bayesian inference paper -->
+  <div class="pub-title">
+    POPE: post optimization posterior evaluation of likelihood free models.
+  </div>
+  <div class="pub-source">
+    Edward Meeds, <strong>Michael Chiang</strong>, Mary Lee, Olivier Cinquin,
+    John Lowengrub and Max Welling.
+    <br />
+    BMC Bioinformatics 2015; 16:264. DOI: 10.1186/s12859-015-0658-1
+  </div>
+  <div class="pub-link">
+    [<a href="{% static 'myContent/pubs/meeds-bmc_bioinformatics.pdf' %}">pdf</a>] &nbsp;
+    [<a href="http://www.ncbi.nlm.nih.gov/pubmed/26289041/">pubmed</a>] &nbsp;
+  </div>
+
+  <!-- Soledad's paper -->
+  <div class="pub-title">
+    BMP signaling is required for cell cleavage in preimplantation-mouse embryos.
+  </div>
+  <div class="pub-source">
+    Nabora Soledad Reyes de Mochel, Mui Luong, <strong>Michael Chiang</strong>,
+    Anna L. Javier, Elizabeth Luu, Fujimori Toshihiko, Grant R. MacGregor,
+    Olivier Cinquin and Ken W.Y. Cho.
+    <br />
+    Developmental Biology, 397(1), 45-55. DOI:10.1016/j.ydbio.2014.10.001
+  </div>
+  <div class="pub-link">
+    [<a href="{% static 'myContent/pubs/mochel-dev_biol.pdf' %}">pdf</a>] &nbsp;
+    [<a href="http://www.ncbi.nlm.nih.gov/pubmed/25446538/">pubmed</a>] &nbsp;
+  </div>
+
+  <!-- Amanda's diffusion paper -->
+  <div class="pub-title">
+    Semi-permeable diffusion barriers enhance patterning robustness in the C.
+    elegans germ line.
+  </div>
+  <div class="pub-source">
+    Amanda Cinquin, Likun Zheng, Pete H. Taylor, Adrian Paz, Lei Zhang,
+    <strong>Michael Chiang</strong>, Joshua J. Snow, Qing Nie and Olivier Cinquin.
+    <br />
+    Developmental Cell, 35(4), 405-417. DOI: http://dx.doi.org/10.1016/j.devcel.2015.10.027
+  </div>
+  <div class="pub-link">
+    [<a href="{% static 'myContent/pubs/cinquin-dev_cell.pdf' %}">pdf</a>] &nbsp;
+    [<a href="http://www.ncbi.nlm.nih.gov/pubmed/26289041/">pubmed</a>] &nbsp;
+  </div>
+
+  <div class="page-header">Publications (submitted)</div>
+
+  <!-- intermittent cycling paper -->
+  <div class="pub-title">
+    Intermittent stem cell cycling balances self-renewal and senescence of the C. elegans germ line.
+  </div>
+  <div class="pub-source">
+    Amanda Cinquin, <strong>Michael Chiang</strong>, Adrian Paz, Sam Hallman,
+    Oliver Yuan, Charless Fowlkes and Olivier Cinquin.
+    <br />
+    Submitted.
+  </div>
+  <div class="pub-link">
+  </div>
+
+
+</div>
+{% endblock %}

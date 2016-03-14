@@ -1,0 +1,29 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'myContent/css/contact.css' %}">
+{% endblock %}
+
+{% block title %}
+  contact
+{% endblock %}
+
+{% block body_block %}
+
+  <div class="content">
+    <div class="page-header">Contact me</div>
+
+    <!-- bmc bioinformatics technique paper -->
+    <div class="contact-text">
+      <div class="contact-email">
+        <b>michael</b> <i>dot</i> <b>chiang</b> <i>dot</i> <b>mc5</b> <i>at</i> <b>gmail</b> <i>dot</i> <b>com</b> <br />
+      </div>
+      Replace <i>dot</i> with "." and <i>at</i> with "@" (this is to prevent spam). <br />
+      I check this email once a week.
+    </div>
+
+
+
+  </div>
+{% endblock %}

@@ -1,0 +1,49 @@
+<!--
+  Template variables:
+    submit_url: This is the url that the editor should submit to
+    form_data: This is serialized POST data that the editor should submit
+    header: This is the "title"
+    initial_text: Initial text shown in the editor
+-->
+
+{% extends "MCBase/base.html" %}
+
+{% block javascript %}
+  {% load staticfiles %}
+  <script src="{% static 'MCEditor/js/ckeditor/ckeditor.js' %}"></script>
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> <!-- TODO: download this to static -->
+{% endblock %}
+
+{% block body_block %}
+
+  <div id="post-editor-container" class="container height-100">
+    <div id="post-editor-header">
+      {{ header|safe }}
+    </div>
+    <a target="_blank" href="{% url 'MCUploader:list' %}">Click to upload file</a>
+
+    <div>
+      <form role="form" action="{{ submit_url }}" method=POST>
+
+      <!-- POST data -->
+      {% csrf_token %}
+      <input type="hidden" name="serialized-form-data" value="{{ serialized_form_data }}" />
+
+      <!-- WYSIWYG text editor -->
+      <textarea cols="10" id="editor" name="form-text" rows="10" style="display:none;"></textarea>
+      <script>
+        CKEDITOR.replace( 'editor', {
+          // Set height of editor window
+          height: $("#post-editor-container").height() - $("#post-editor-header").height() - CKEDITOR.config.height - $("#submit-button").height() ,
+        });
+        // set initial text
+        CKEDITOR.instances.editor.setData("{{ initial_text|safe }}")
+      </script>
+
+      <!-- submit button -->
+      <button id="submit-button" type="submit" class="btn btn-primary">Submit your post!</button>
+    </form>
+  </div>
+  </div>
+
+{% endblock %}

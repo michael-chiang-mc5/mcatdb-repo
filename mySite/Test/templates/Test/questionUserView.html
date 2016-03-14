@@ -1,0 +1,79 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'Test/css/admin.css' %}">
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+{% endblock %}
+
+{% block title %}
+  question {{ question.pk }}
+{% endblock %}
+
+{% block body_block %}
+  {% if request.user.is_superuser %}
+    <a href="{% url 'Test:questionDetail' question.pk %}">adminView</a>
+  {% endif %}
+
+  <div class="box background-green">
+    Correct
+    <div class="footer">
+      [<a href="">See explanation</a>] &nbsp;
+      [<a href="">Next question</a>] &nbsp;
+    </div>
+  </div>
+  <div class="box background-red">
+    Incorrect
+    <div class="footer">
+      [<a href="">See explanation</a>] &nbsp;
+      [<a href="">Next question</a>] &nbsp;
+      [<a href="">Retry</a>] &nbsp;
+    </div>
+  </div>
+
+  <div class="box">
+    Filler
+  </div>
+
+
+
+  <div>
+
+    {% if passage %}
+      <div class="box col-md-6">
+        <div class="date">
+            Reading passage:
+        </div>
+        <hr />
+        <div>
+          {{ passage|safe }}
+        </div>
+        <div class="footer">
+        </div>
+      </div>
+    {% endif %}
+
+    {% if passage %}
+        <div class="col-md-6">
+    {% else %}
+        <div>
+    {% endif %}
+          <div class="box-offset-3">
+            <div class="date">
+              Question:
+            </div>
+            <div>
+              {{ question|safe }}
+            </div>
+          {% for answer in question.answer_set.all %}
+            <button type="button" class="btn btn-block btn-default answer-button">
+              {{ answer|safe }}
+            </button>
+          {% endfor %}
+          </div>
+        </div>
+
+
+  </div>
+
+{% endblock %}

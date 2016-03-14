@@ -1,0 +1,22 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'myContent/css/questionOfTheDay.css' %}">
+{% endblock %}
+
+{% block title %}
+  mcatDB
+{% endblock %}
+
+{% block body_block %}
+  <div class="content">
+    {% if request.user.is_superuser %}
+      <div>
+        <a href="{% url 'Test:adminPanel' %}">admin panel</a>
+      </div>
+    {% endif %}
+
+    Welcome
+  </div>
+{% endblock %}

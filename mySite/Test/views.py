@@ -1,0 +1,206 @@
+from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
+from .models import *
+from django.core.urlresolvers import reverse
+from MCEditor.views import editor
+from MCBase.views import *
+
+def index(request):
+    context = {}
+    return render(request, 'Test/index.html', context)
+
+def passageList(request):
+    passages = Passage.objects.all()
+    context = {'passages':passages}
+    return render(request, 'Test/passageList.html', context)
+def passageDetail(request,passage_pk):
+    passage = Passage.objects.get(pk=passage_pk)
+    questions = passage.question_set.all()
+    context = {'passage':passage,'questions':questions}
+    return render(request, 'Test/passageDetail.html', context)
+
+def standaloneQuestionList(request):
+    questions = Question.objects.exclude(passage__isnull=False)
+    context = {'questions':questions}
+    return render(request, 'Test/questionList.html', context)
+def questionDetail(request,question_pk):
+    question = Question.objects.get(pk=question_pk)
+    answers = Answer.objects.filter(question=question)
+    try:
+        passage = question.passage
+    except:
+        passage = None;
+    tags = question.tags.all()
+    context = {'passage':passage, 'question':question, 'answers':answers, 'tags':tags}
+    return render(request, 'Test/questionDetail.html', context)
+def questionUserView(request,question_pk):
+    question = Question.objects.get(pk=question_pk)
+    passage = question.passage
+    context = {'passage':passage,'question':question}
+    return render(request, 'Test/questionUserView.html', context)
+
+
+
+def adminPanel(request):
+    context = {}
+    return render(request, 'Test/adminPanel.html', context)
+
+# Methods to add and edit passages
+def addPassageEditor(request):
+    submit_url = reverse('Test:addPassage')
+    form_data = {}
+    header = "Add a passage"
+    initial_text = ""
+    html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
+    return html
+def addPassage(request):
+    form_text = request.POST.get("form-text")
+    passage = Passage(text=form_text)
+    passage.save()
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage.pk]) )
+def editPassageEditor(request,passage_pk):
+    submit_url = reverse('Test:editPassage',args=[passage_pk])
+    form_data = {}
+    header = "Edit a passage"
+    # get initial text
+    passage = Passage.objects.get(pk=passage_pk)
+    initial_text = passage.text
+    # return editor
+    html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
+    return html
+def editPassage(request,passage_pk):
+    form_text = request.POST.get("form-text")
+    passage = Passage.objects.get(pk=passage_pk)
+    passage.text = form_text
+    passage.save()
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
+
+# Methods to add and edit questions
+def addQuestionEditor(request,passage_pk):
+    submit_url = reverse('Test:addQuestion')
+    form_data = serialize_json({'passage_pk':passage_pk,})
+    header = "Add a question"
+    initial_text = ""
+    html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
+    return html
+def addQuestion(request):
+    # get question text
+    form_text = request.POST.get("form-text")
+    question = Question(text=form_text)
+    # get passage corresponding to question
+    serialized_form_data = request.POST.get("serialized-form-data")
+    form_data = deserialize_json_string(serialized_form_data)
+    passage_pk = int(form_data["passage_pk"])
+    if passage_pk != 0:
+        question.passage = Passage.objects.get(pk=passage_pk)
+    # save
+    question.save()
+    return HttpResponseRedirect( reverse('Test:questionDetail',args=[question.pk]) )
+def editQuestionEditor(request,question_pk):
+    submit_url = reverse('Test:editQuestion',args=[question_pk])
+    form_data = {}
+    header = "Edit a question"
+    # get initial text
+    question = Question.objects.get(pk=question_pk)
+    initial_text = question.text
+    # return html
+    html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
+    return html
+def editQuestion(request,question_pk):
+    # get question text
+    form_text = request.POST.get("form-text")
+    question = Question.objects.get(pk=question_pk)
+    question.text=form_text
+    # save
+    question.save()
+    return HttpResponseRedirect( reverse('Test:questionDetail',args=[question.pk]) )
+
+# Methods to add and edit answers
+def addAnswerEditor(request,question_pk):
+    submit_url = reverse('Test:addAnswer')
+    form_data = serialize_json({'question_pk':question_pk,})
+    header = "Add an answer"
+    initial_text = ""
+    html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
+    return html
+def addAnswer(request):
+    # get answer text
+    form_text = request.POST.get("form-text")
+    answer = Answer(text=form_text)
+    # get attached question
+    serialized_form_data = request.POST.get("serialized-form-data")
+    form_data = deserialize_json_string(serialized_form_data)
+    question_pk = int(form_data["question_pk"])
+    answer.question = Question.objects.get(pk=question_pk)
+    # save
+    answer.save()
+    return HttpResponseRedirect( reverse('Test:questionDetail',args=[question_pk]) )
+def editAnswerEditor(request,answer_pk):
+    submit_url = reverse('Test:editAnswer',args=[answer_pk])
+    form_data = {}
+    header = "Edit an answer"
+    # get initial text
+    answer = Answer.objects.get(pk=answer_pk)
+    initial_text = answer.text
+    # return html
+    html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
+    return html
+def editAnswer(request,answer_pk):
+    # get answer text
+    form_text = request.POST.get("form-text")
+    answer = Answer.objects.get(pk=answer_pk)
+    answer.text = form_text
+    # save
+    answer.save()
+    return HttpResponseRedirect( reverse('Test:questionDetail',args=[answer.question.pk]) )
+def editExplanationEditor(request,answer_pk):
+    submit_url = reverse('Test:editExplanation',args=[answer_pk])
+    form_data = {}
+    header = "Edit an explanation"
+    # get initial text
+    answer = Answer.objects.get(pk=answer_pk)
+    initial_text = answer.explanation
+    # return html
+    html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
+    return html
+def editExplanation(request,answer_pk):
+    # get answer text
+    form_text = request.POST.get("form-text")
+    answer = Answer.objects.get(pk=answer_pk)
+    answer.explanation = form_text
+    # save
+    answer.save()
+    return HttpResponseRedirect( reverse('Test:questionDetail',args=[answer.question.pk]) )
+
+
+def markAnswerCorrect(request,answer_pk):
+    answer = Answer.objects.get(pk=answer_pk)
+    answer.correct = True
+    answer.save()
+    return HttpResponseRedirect( reverse('Test:questionDetail',args=[answer.question.pk]) )
+def markAnswerIncorrect(request,answer_pk):
+    answer = Answer.objects.get(pk=answer_pk)
+    answer.correct = False
+    answer.save()
+    return HttpResponseRedirect( reverse('Test:questionDetail',args=[answer.question.pk]) )
+
+def addTag(request,question_pk):
+    text = request.POST.get("tag-text")
+    Tag.newTag(text)
+    tag = Tag.objects.get(text=text)
+    question = Question.objects.get(pk=question_pk)
+    tag.questions.add(question)
+    return editTags(request,question_pk)
+def removeTag(request,question_pk):
+    text = request.POST.get("tag-text")
+    tag = Tag.objects.get(text=text)
+    question = Question.objects.get(pk=question_pk)
+    tag.questions.remove(question)
+    tag.save()
+    return editTags(request,question_pk)
+def editTags(request,question_pk):
+    question = Question.objects.get(pk=question_pk)
+    tags = question.tags.all()
+    allTags = Tag.objects.all()
+    context = {'question':question, 'tags':tags, 'allTags':allTags}
+    return render(request, 'Test/editTags.html', context)

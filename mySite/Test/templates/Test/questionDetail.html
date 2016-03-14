@@ -1,0 +1,86 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'Test/css/admin.css' %}">
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/javascript" src="{% static 'Test/js/resize_img.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+  question list
+{% endblock %}
+
+{% block body_block %}
+
+  {% if question.passage != None %}
+    <div class="box">
+        {{ passage|safe }}
+    </div>
+  {% endif %}
+
+  <div class="box">
+    <div class="date">
+      {{ question.time|date:'F j, Y' }}
+    </div>
+    <div class="footer">
+      {% for tag in tags %}
+        {{ tag }} &nbsp;
+      {% endfor %}
+      [<a href="{% url 'Test:editTags' question.pk %}">edit tags</a>]
+    </div>
+
+
+    <div>
+      {{ question|safe }}
+    </div>
+
+
+
+  <div class="footer">
+    [<a href="{% url 'Test:editQuestionEditor' question.pk %}">edit</a>] &nbsp;
+    {% if question.passage == None %}
+      [<a href="{% url 'Test:standaloneQuestionList' %}"]>back to standalong question list</a>]
+    {% else %}
+      [<a href="{% url 'Test:passageDetail' question.passage.pk %}"]>back to passage</a>]
+    {% endif %}
+  </div>
+  </div>
+
+  <hr />
+  <a href="{% url 'Test:addAnswerEditor' question.pk %}">Add answer</a>
+
+  <!-- answers -->
+  {% for answer in answers %}
+    <div class="box-offset {% if answer.correct %}background-green{% else %}background-red{% endif %}">
+      <div>
+        {{ answer|safe }}
+      </div>
+      <div class="footer">
+        [<a href="{% url 'Test:editAnswerEditor' answer.pk %}">edit</a>] &nbsp;
+        [<a href="{% url 'Test:markAnswerCorrect' answer.pk %}">Mark correct</a>] &nbsp;
+        [<a href="{% url 'Test:markAnswerIncorrect' answer.pk %}">Mark incorrect</a>]
+      </div>
+    </div>
+
+    <!-- explanation -->
+    <div class="box-offset-2">
+      <div>
+        {% if answer.explanation and answer.explanation.strip %}
+          <b>Explanation:</b>
+          {{ answer.explanation|safe }}
+        {% else %}
+          No explanation
+        {% endif %}
+      </div>
+      <div class="footer">
+        [<a href="{% url 'Test:editExplanationEditor' answer.pk %}">edit</a>] &nbsp;
+      </div>
+    </div>
+
+
+  {% endfor %}
+
+
+
+{% endblock %}
