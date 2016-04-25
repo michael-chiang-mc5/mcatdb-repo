@@ -50,6 +50,14 @@ def adminPanel(request):
         return HttpResponse("You are not a superuser")
     context = {}
     return render(request, 'Test/adminPanel.html', context)
+def adminList(request):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
+
+    tags = Tag.objects.all()
+
+    context = {'tags':tags}
+    return render(request, 'Test/adminList.html', context)
 
 # Methods to add and edit passages
 def addPassageEditor(request):

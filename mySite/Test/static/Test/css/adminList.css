@@ -1,0 +1,99 @@
+.include-tag {
+  background-color: #AAFFAA;
+}
+
+.exclude-tag {
+  background-color: #FFAAAA;
+}
+
+input[type=checkbox], input[type=radio] {
+    margin: 4px 4px 4px 4px !important;
+}
+
+.inline {
+  display: inline-block;
+}
+
+hr {
+  border-top: 1px solid black;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+
+.box {
+  background-color: #F5F5F5;
+  padding-left: 0.25in;
+  padding-right: 0.25in;
+  padding-top: 0.05in;
+  padding-bottom: 0.05in;
+  border-radius: 0.25in;
+  margin-bottom: 20px;
+}
+
+.background-red {
+  background-color: rgba(250, 109, 121, 0.4) !important;
+}
+.background-green {
+  background-color: rgba(65, 205, 117, 0.4) !important ;
+}
+
+
+.box-offset {
+  background-color: #F5F5F5;
+  padding-left: 0.25in;
+  padding-right: 0.25in;
+  padding-top: 0.05in;
+  padding-bottom: 0.05in;
+  border-radius: 0.25in;
+  margin-top: 20px;
+  margin-left:50px;
+}
+.box-offset-2 {
+  background-color: #F5F5F5;
+  padding-left: 0.25in;
+  padding-right: 0.25in;
+  padding-top: 0.05in;
+  padding-bottom: 0.05in;
+  border-radius: 0.25in;
+  margin-top: 20px;
+  margin-left:100px;
+}
+.box-offset-3 {
+  background-color: #F5F5F5;
+  padding-left: 0.25in;
+  padding-right: 0.4in;
+  padding-top: 0.05in;
+  padding-bottom: 0.1in;
+  border-radius: 0.25in;
+  margin-left:10px;
+}
+
+.answer-button {
+  margin-left:20px;
+  text-align: left;
+}
+
+.date {
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 9px;
+}
+
+.footer {
+  font-size: 10px;
+}
+
+
+figure {
+  width: -webkit-min-content;
+  width: -moz-min-content;
+  width: min-content;
+  margin-bottom:10px;
+}
+figcaption {
+  text-align: left;
+  font-size: 12px;
+  color: green;
+}

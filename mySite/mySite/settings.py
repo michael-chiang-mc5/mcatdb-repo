@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 
+# new users are redirected to this url to create their profile
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/userProfile/new_user/'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
     'myContent',
+    'UserProfile',
     'Test',
     'MCEditor',
     'MCUploader',

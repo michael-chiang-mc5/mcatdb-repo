@@ -32,7 +32,7 @@ class Answer(models.Model):
         return self.text
 
 class Tag(models.Model):
-    text = models.TextField()
+    text = models.CharField(max_length=255, unique=True)
     questions  = models.ManyToManyField(Question, blank=True, related_name="tags")  # to access tags from Question instance, question.tags.all()
     def __str__(self):
         return self.text

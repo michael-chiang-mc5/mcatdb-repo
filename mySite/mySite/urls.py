@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^Test/', include('Test.urls', namespace='Test')),
     url(r'^MCUploader/', include('MCUploader.urls', namespace='MCUploader')),
     url(r'^MCEditor/', include('MCEditor.urls', namespace='MCEditor')),
+    url(r'^userProfile/', include('UserProfile.urls', namespace='UserProfile')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # TODO: disable this in production
 
 

@@ -1,0 +1,80 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'UserProfile/css/editProfileInterface.css' %}">
+  <script src="{% static 'UserProfile/js/editProfileInterface.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+  Edit profile
+{% endblock %}
+
+
+
+{% block body_block %}
+  <h1>
+    <a href="{% url 'myContent:index' %}">
+      Back to index
+    </a>
+  </h1>
+
+  <div class=box>
+    <b>Alias:</b>
+    <br />
+    {{ request.user.userprofile.getName }}
+    <br />
+    <a pk="{{group.pk}}" class="edit-link pointer">click to edit</a>
+    <div class="editform" style="display: none;">
+      <div>
+        Your alias is what other people will see when they look at your comments, etc.
+      </div>
+      <form class="note-form" role="form" action="{% url 'UserProfile:editAlias' %}" method=POST>
+        {% csrf_token %}
+        <textarea name="form_text" rows="1">{{ user.userprofile.getName }}</textarea>
+        <button class="btn btn-primary" type="submit">submit edit</button>
+      </form>
+    </div>
+  </div>
+
+  <div class=box>
+    <b>Tag filters:</b>
+    <br />
+    This allows you to select what sorts of questions will pop up when you select a random question
+    <br />
+    <a pk="{{group.pk}}" class="edit-link pointer">click to edit</a>
+    <div class="editform" style="display: none;">
+
+      <div>
+        <form class="note-form" role="form" action="{% url 'UserProfile:editUserTags' %}" method=POST>
+          {% csrf_token %}
+          <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tbody>
+              {% for tag in tags %}
+                {% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
+                <td class="text" align="left">
+                  <div class="include-tag inline">
+                    <input onclick="gYes(8)" type="checkbox" id="gy8" name="{{ tag }}" value="include" {% if tag.include %} checked {% endif %}>
+                  </div>
+                  <div class="exclude-tag inline">
+                    <input id="gn8" onclick="gNo(8)" type="checkbox" name="{{ tag }}" value="exclude" {% if tag.exclude %} checked {% endif %}>
+                  </div>
+                  {{ tag }}
+                </td>
+                {% if forloop.counter|divisibleby:3 %}</tr>{% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+          <button class="btn btn-primary" type="submit">submit</button>
+        </form>
+      </div>
+
+
+
+    </div>
+  </div>
+
+
+
+
+{% endblock %}

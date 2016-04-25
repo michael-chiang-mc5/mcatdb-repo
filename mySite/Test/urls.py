@@ -11,6 +11,7 @@ urlpatterns = [
 
 
     url(r'^adminPanel/$', views.adminPanel, name='adminPanel'),
+    url(r'^adminList/$', views.adminList, name='adminList'),
 
     # add or edit passages
     url(r'^addPassage/$', views.addPassage, name='addPassage'),
