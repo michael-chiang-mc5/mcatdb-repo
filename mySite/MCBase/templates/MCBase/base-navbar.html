@@ -28,6 +28,9 @@
             </a>
             <ul class="dropdown-menu">
               <li><a href="{% url 'UserProfile:editProfileInterface' %}">User profile</a></li>
+              {% if request.user.is_superuser %}
+                <li><a href="{% url 'Test:adminPanel' %}">Admin panel</a></li>
+              {% endif %}
               <li role="separator" class="divider"></li>
               <li><a href="{% url 'logout' %}?next=/">Logout</a></li>
             </ul>
