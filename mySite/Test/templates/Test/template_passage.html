@@ -17,7 +17,7 @@
       <div>
         {{ passage|safe }}
       </div>
-      <div class="admin-tools">
+      <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
         [<a href="{% url 'Test:editPassageEditor' passage.pk %}">edit</a>] &nbsp;
         [<a href="{% url 'Test:deletePassage' passage.pk %}">delete</a>] &nbsp;
       </div>
@@ -51,7 +51,7 @@
             <div class="answer-box question{{ question.pk }} {% if answer.correct %}answer-correct{% else %}answer-incorrect{% endif %}">
               <input type="radio" name="question{{ question.pk }}" value="answer{{ answer.pk }}" class="hidden" />
               {{ answer|safe }}
-              <div class="admin-tools">
+              <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
                 [<a href="{% url 'Test:editAnswerEditor' answer.pk %}">edit answer</a>] &nbsp;
                 [<a href="{% url 'Test:markAnswerCorrect' answer.pk %}">right answer</a>] &nbsp;
                 [<a href="{% url 'Test:markAnswerIncorrect' answer.pk %}">wrong answer</a>] &nbsp;
@@ -60,7 +60,7 @@
 
               <div class="explanation">
                 {{ answer.explanation|safe }}
-                <div class="admin-tools">
+                <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
                   [<a href="{% url 'Test:editExplanationEditor' answer.pk %}">edit explanation</a>] &nbsp;
                 </div>
               </div>
@@ -68,7 +68,7 @@
             </div>
 
           {% endfor %}
-          <div class="admin-tools">
+          <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
             [<a href="{% url 'Test:editQuestionEditor' question.pk %}">edit question</a>] &nbsp;
             [<a href="{% url 'Test:addAnswerEditor' question.pk %}">Add answer</a>] &nbsp;
             [<a href="{% url 'Test:deleteQuestion' question.pk %}">delete</a>] &nbsp;
@@ -76,7 +76,7 @@
         </div>
       {% endfor %}
 
-      <div class="admin-tools">
+      <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
         [<a href="{% url 'Test:addQuestionEditor' passage.pk %}">Add question</a>]
       </div>
 

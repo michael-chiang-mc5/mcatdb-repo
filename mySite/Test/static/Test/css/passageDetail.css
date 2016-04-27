@@ -24,8 +24,11 @@
   cursor: pointer;
 }
 
-.admin-tools {
+.display-none {
   display: none;
+}
+
+.admin-tools {
   font-size: 10px;
 }
 

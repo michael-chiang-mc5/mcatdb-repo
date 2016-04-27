@@ -5,6 +5,15 @@ from django.core.urlresolvers import reverse
 from MCEditor.views import editor
 from MCBase.views import *
 
+def toggleAdminTools(request):
+    userProfile = request.user.userprofile
+    if userProfile.seeAdminTools == True:
+        userProfile.seeAdminTools = False
+    else:
+        userProfile.seeAdminTools = True
+    userProfile.save()
+    return HttpResponse("done")
+
 def submitPassageAnswers(request):
     for key in request.POST:
         if key[:8] == 'question':

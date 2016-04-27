@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^deleteQuestion/(?P<question_pk>[0-9]+)/$', views.deleteQuestion, name='deleteQuestion'),
     url(r'^deletePassage/(?P<passage_pk>[0-9]+)/$', views.deletePassage, name='deletePassage'),
 
+    url(r'^toggleAdminTools/$', views.toggleAdminTools, name='toggleAdminTools'),
 
     url(r'^submitPassageAnswers/$', views.submitPassageAnswers, name='submitPassageAnswers'),
 

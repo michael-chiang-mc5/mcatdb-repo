@@ -7,6 +7,7 @@ class UserProfile(models.Model):
     alias = models.TextField(blank=True,null=True)
     tags_include = models.ManyToManyField(Tag, blank=True, related_name="tags_include")  # to access tags_include from UserProfile instance, userProfile.tags_include.all()
     tags_exclude = models.ManyToManyField(Tag, blank=True, related_name="tags_exclude")  # to access tags_include from UserProfile instance, userProfile.tags_exclude.all()
+    seeAdminTools = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.user)

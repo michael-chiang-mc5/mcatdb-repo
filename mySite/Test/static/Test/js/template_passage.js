@@ -47,13 +47,6 @@ $(document).ready(function() {
   });
 });
 
-// Toggle admin-tools
-$(document).ready(function() {
-  $('#toggle-admin-tools').click(function() {
-    $('.admin-tools').toggle()
-
-  });
-});
 
 // Toggle explanation
 $(document).ready(function() {
@@ -67,12 +60,22 @@ $(document).ready(function() {
   });
 });
 
+// Toggle admin tools
+$(document).on('click', "#toggle-admin-tools", function(){
+  $.ajax({
+    type        : 'GET', // define the type of HTTP verb we want to use (POST for our form)
+    url         : '/Test/toggleAdminTools/', // the url where we want to POST
+  }).done(function(data) {
+    $('.admin-tools').toggle()
+  });
+});
+
+// Make passage/questions same height as the window
 window_height = $(window).height()
 function getHeight() {
   offset_height = $('.left-box').offset().top
   return window_height - offset_height
 }
-
 $(document).ready(function() {
   // set initial div height / width
   $('.left-box').css({
