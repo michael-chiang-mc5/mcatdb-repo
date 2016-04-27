@@ -58,7 +58,7 @@
                 [<a href="{% url 'Test:deleteAnswer' answer.pk %}">delete answer</a>] &nbsp;
               </div>
 
-              <div class="hidden explanation">
+              <div class="explanation">
                 {{ answer.explanation|safe }}
                 <div class="admin-tools">
                   [<a href="{% url 'Test:editExplanationEditor' answer.pk %}">edit explanation</a>] &nbsp;

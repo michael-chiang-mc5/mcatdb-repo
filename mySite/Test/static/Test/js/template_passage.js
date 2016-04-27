@@ -61,17 +61,15 @@ $(document).ready(function() {
     var answer_boxes = $(this).parent().siblings(".answer-box")
     answer_boxes.each(function () {
       var explanation = $(this).children(".explanation")
-      explanation.removeClass('hidden')
+      explanation.toggle()
     });
 
   });
 });
 
-
 window_height = $(window).height()
 function getHeight() {
   offset_height = $('.left-box').offset().top
-  //alert("window_height="+window_height+", offset="+offset_height)
   return window_height - offset_height
 }
 
@@ -83,16 +81,5 @@ $(document).ready(function() {
   $('.right-box').css({
     'height': getHeight(),
   });
-
-  // make sure div stays full width/height on resize
-  $(window).resize(function(){
-    $('.left-box').css({
-      'height': getHeight(),
-    });
-    $('.right-box').css({
-      'height': getHeight(),
-    });
-  });
-
 
 });
