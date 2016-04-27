@@ -2,13 +2,11 @@
     width:50%;
     float:left;
     overflow: scroll;
-    max-height: 90%;
 }
 .right-box{
     width:49%;
     float:right;
     overflow: scroll;
-    max-height: 90%;
 }
 
 .header-correct {

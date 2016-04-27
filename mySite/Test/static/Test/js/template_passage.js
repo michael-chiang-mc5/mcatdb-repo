@@ -66,3 +66,33 @@ $(document).ready(function() {
 
   });
 });
+
+
+window_height = $(window).height()
+function getHeight() {
+  offset_height = $('.left-box').offset().top
+  //alert("window_height="+window_height+", offset="+offset_height)
+  return window_height - offset_height
+}
+
+$(document).ready(function() {
+  // set initial div height / width
+  $('.left-box').css({
+    'height': getHeight(),
+  });
+  $('.right-box').css({
+    'height': getHeight(),
+  });
+
+  // make sure div stays full width/height on resize
+  $(window).resize(function(){
+    $('.left-box').css({
+      'height': getHeight(),
+    });
+    $('.right-box').css({
+      'height': getHeight(),
+    });
+  });
+
+
+});
