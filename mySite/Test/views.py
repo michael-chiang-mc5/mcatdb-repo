@@ -5,12 +5,39 @@ from django.core.urlresolvers import reverse
 from MCEditor.views import editor
 from MCBase.views import *
 
+def submitPassageAnswers(request):
+    for key in request.POST:
+        if key[:8] == 'question':
+            value = request.POST[key]
+
+            return HttpResponse(value)
+
+    user = request.user
+    tags = Tag.objects.all()
+    for tag in tags:
+        # Tag was checkmarked (either include or exclude)
+        if request.POST.get(tag.text,False):
+            if request.POST.get(tag.text) == "include":
+                user.userprofile.tags_include.add(tag)
+                user.userprofile.tags_exclude.remove(tag)
+            elif request.POST.get(tag.text) == "exclude":
+                user.userprofile.tags_include.remove(tag)
+                user.userprofile.tags_exclude.add(tag)
+        # No tag checkmark
+        else:
+            user.userprofile.tags_include.remove(tag)
+            user.userprofile.tags_exclude.remove(tag)
+    return HttpResponse("finished")
+
+
+# This displays a list of all truncated passages
 def passageList(request):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
     passages = Passage.objects.all()
     context = {'passages':passages}
     return render(request, 'Test/passageList.html', context)
+# This displays a single passage with associated questions/answers
 def passageDetail(request,passage_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
@@ -121,7 +148,7 @@ def addQuestion(request):
         question.passage = Passage.objects.get(pk=passage_pk)
     # save
     question.save()
-    return HttpResponseRedirect( reverse('Test:questionDetail',args=[question.pk]) )
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
 def editQuestionEditor(request,question_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
@@ -143,7 +170,7 @@ def editQuestion(request,question_pk):
     question.text=form_text
     # save
     question.save()
-    return HttpResponseRedirect( reverse('Test:questionDetail',args=[question.pk]) )
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[question.passage.pk]) )
 
 # Methods to add and edit answers
 def addAnswerEditor(request,question_pk):
@@ -168,7 +195,29 @@ def addAnswer(request):
     answer.question = Question.objects.get(pk=question_pk)
     # save
     answer.save()
-    return HttpResponseRedirect( reverse('Test:questionDetail',args=[question_pk]) )
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[answer.question.passage.pk]) )
+def deleteAnswer(request,answer_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
+    answer = Answer.objects.get(pk=answer_pk)
+    passage_pk = answer.question.passage.pk
+    answer.delete()
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
+def deleteQuestion(request,question_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
+    question = Question.objects.get(pk=question_pk)
+    passage_pk = question.passage.pk
+    question.delete()
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
+def deletePassage(request,passage_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
+    passage = Passage.objects.get(pk=passage_pk)
+    passage.delete()
+    return HttpResponseRedirect( reverse('Test:passageList') )
+
+
 def editAnswerEditor(request,answer_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
@@ -190,7 +239,7 @@ def editAnswer(request,answer_pk):
     answer.text = form_text
     # save
     answer.save()
-    return HttpResponseRedirect( reverse('Test:questionDetail',args=[answer.question.pk]) )
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[answer.question.passage.pk]) )
 def editExplanationEditor(request,answer_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
@@ -212,7 +261,7 @@ def editExplanation(request,answer_pk):
     answer.explanation = form_text
     # save
     answer.save()
-    return HttpResponseRedirect( reverse('Test:questionDetail',args=[answer.question.pk]) )
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[answer.question.passage.pk]) )
 
 
 def markAnswerCorrect(request,answer_pk):
@@ -221,14 +270,14 @@ def markAnswerCorrect(request,answer_pk):
     answer = Answer.objects.get(pk=answer_pk)
     answer.correct = True
     answer.save()
-    return HttpResponseRedirect( reverse('Test:questionDetail',args=[answer.question.pk]) )
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[answer.question.passage.pk]) )
 def markAnswerIncorrect(request,answer_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
     answer = Answer.objects.get(pk=answer_pk)
     answer.correct = False
     answer.save()
-    return HttpResponseRedirect( reverse('Test:questionDetail',args=[answer.question.pk]) )
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[answer.question.passage.pk]) )
 
 def addTag(request,question_pk):
     if not request.user.is_superuser:

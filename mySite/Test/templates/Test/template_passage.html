@@ -1,0 +1,100 @@
+
+
+<div>
+  [<a class="cursor-pointer" id="toggle-admin-tools">Toggle admin tools</a>]
+</div>
+
+
+<div>
+
+  <!-- This is the passage -->
+  <div class="left-box">
+    <div class="box">
+      <div class="date">
+          passage
+          <hr />
+      </div>
+      <div>
+        {{ passage|safe }}
+      </div>
+      <div class="admin-tools">
+        [<a href="{% url 'Test:editPassageEditor' passage.pk %}">edit</a>] &nbsp;
+        [<a href="{% url 'Test:deletePassage' passage.pk %}">delete</a>] &nbsp;
+      </div>
+    </div>
+  </div>
+
+  <div class="box right-box">
+    <div class="date">
+        questions
+        <hr />
+    </div>
+
+    <div id="questions-box">
+      {% csrf_token %}
+
+      {% for question in questions %}
+        <div class="question-box">
+          <div class="hidden header-correct">
+            You are correct! Click <a class="cursor-pointer toggle-explanation">here</a> to toggle explanation.
+          </div>
+          <div class="hidden header-incorrect">
+            Wrong! Click <a class="cursor-pointer toggle-explanation">here</a> to toggle explanation.
+          </div>
+
+          <div>
+            {{ question|safe }}
+          </div>
+          <!-- answers -->
+          <hr />
+          {% for answer in question.answer_set.all %}
+            <div class="answer-box question{{ question.pk }} {% if answer.correct %}answer-correct{% else %}answer-incorrect{% endif %}">
+              <input type="radio" name="question{{ question.pk }}" value="answer{{ answer.pk }}" class="hidden" />
+              {{ answer|safe }}
+              <div class="admin-tools">
+                [<a href="{% url 'Test:editAnswerEditor' answer.pk %}">edit answer</a>] &nbsp;
+                [<a href="{% url 'Test:markAnswerCorrect' answer.pk %}">right answer</a>] &nbsp;
+                [<a href="{% url 'Test:markAnswerIncorrect' answer.pk %}">wrong answer</a>] &nbsp;
+                [<a href="{% url 'Test:deleteAnswer' answer.pk %}">delete answer</a>] &nbsp;
+              </div>
+
+              <div class="hidden explanation">
+                {{ answer.explanation|safe }}
+                <div class="admin-tools">
+                  [<a href="{% url 'Test:editExplanationEditor' answer.pk %}">edit explanation</a>] &nbsp;
+                </div>
+              </div>
+
+            </div>
+
+          {% endfor %}
+          <div class="admin-tools">
+            [<a href="{% url 'Test:editQuestionEditor' question.pk %}">edit question</a>] &nbsp;
+            [<a href="{% url 'Test:addAnswerEditor' question.pk %}">Add answer</a>] &nbsp;
+            [<a href="{% url 'Test:deleteQuestion' question.pk %}">delete</a>] &nbsp;
+          </div>
+        </div>
+      {% endfor %}
+
+      <div class="admin-tools">
+        [<a href="{% url 'Test:addQuestionEditor' passage.pk %}">Add question</a>]
+      </div>
+
+      <!-- submit -->
+      <br />
+      <button class="btn btn-primary width-100" type="submit">submit</button>
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+
+
+
+
+</div>

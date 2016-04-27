@@ -2,6 +2,14 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+    url(r'^deleteAnswer/(?P<answer_pk>[0-9]+)/$', views.deleteAnswer, name='deleteAnswer'),
+    url(r'^deleteQuestion/(?P<question_pk>[0-9]+)/$', views.deleteQuestion, name='deleteQuestion'),
+    url(r'^deletePassage/(?P<passage_pk>[0-9]+)/$', views.deletePassage, name='deletePassage'),
+
+
+    url(r'^submitPassageAnswers/$', views.submitPassageAnswers, name='submitPassageAnswers'),
+
+
     url(r'^passageList/$', views.passageList, name='passageList'),
     url(r'^passageDetail/(?P<passage_pk>[0-9]+)/$', views.passageDetail, name='passageDetail'),
 

@@ -2,8 +2,9 @@
 {% load staticfiles %}
 
 {% block javascript %}
-  <link rel="stylesheet" href="{% static 'Test/css/admin.css' %}">
-  <script type="text/javascript" src="{% static 'Test/js/resize_img.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'Test/css/passageDetail.css' %}">
+  <script type="text/javascript" src="{% static 'Test/js/template_passage.js' %}"></script>
+
 {% endblock %}
 
 {% block title %}
@@ -12,41 +13,7 @@
 
 {% block body_block %}
   <div>
-      <div class="box">
-        <div class="date">
-          <div>
-            {{ passage.time|date:'F j, Y' }}
-          </div>
-          <hr />
-        </div>
-        <div>
-          {{ passage|safe }}
-        </div>
-        <div class="footer">
-          [<a href="{% url 'Test:editPassageEditor' passage.pk %}">edit</a>] &nbsp;
-          [<a href="{% url 'Test:passageList' %}"]>back to passage list</a>] &nbsp;
-        </div>
-      </div>
-      <hr />
-      <div>
-        <a href="{% url 'Test:addQuestionEditor' passage.pk %}">Add question</a>
-      </div>
-
-
-      {% for question in questions %}
-        <div class="box-offset">
-          <div>
-            {{ question|safe }}
-          </div>
-          <div class="footer">
-            [<a href="{% url 'Test:editQuestionEditor' question.pk %}">edit</a>] &nbsp;
-            [<a href="{% url 'Test:questionDetail' question.pk %}">detail</a>] &nbsp;
-            [<a href="{% url 'Test:questionUserView' question.pk %}">user view</a>] &nbsp;
-          </div>
-        </div>
-      {% endfor %}
-
-
+    {% include "Test/template_passage.html" %}
   </div>
 
 {% endblock %}

@@ -15,3 +15,10 @@ class UserProfile(models.Model):
             return self.alias
         else:
             return user.get_username()
+    def exists(user):
+        try:
+            UserProfile.objects.get(user=user)
+        except:
+            return False
+        else:
+            return True

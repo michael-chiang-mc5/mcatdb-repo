@@ -9,10 +9,10 @@ def new_user(request):
     user = request.user
     userprofile = UserProfile(user=user,alias=user.username)
     userprofile.save()
-    return HttpResponseRedirect(reverse('myContent:questionOfTheDay'))
+    return HttpResponseRedirect(reverse('myContent:index'))
 
 def editProfileInterface(request):
-    tags = Tag.objects.extra( select={'lower_text': 'lower(text)'}).order_by("lower_text").all()
+    tags = Tag.objects.extra( select={'lower_text': 'lower(text)'}).order_by("lower_text").all() # tags sorted in alphabetical order
     for tag in tags:
         tag.include = tag in request.user.userprofile.tags_include.all()
         tag.exclude = tag in request.user.userprofile.tags_exclude.all()

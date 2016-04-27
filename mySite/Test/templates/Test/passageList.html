@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block javascript %}
-  <link rel="stylesheet" href="{% static 'Test/css/admin.css' %}">
+  <link rel="stylesheet" href="{% static 'Test/css/passageList.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -11,27 +11,26 @@
 
 {% block body_block %}
   <div>
+    <h1>Passage list</h1>
+
     [<a href="{% url 'Test:addPassageEditor' %}">Add passage</a>] &nbsp;
     [<a href="{% url 'Test:adminPanel' %}">Back to admin panel</a>] &nbsp;
-
     <hr />
+    <br />
+
+
+  </div>
+
+
+  <div>
 
     {% if passages %}
       {% for passage in passages %}
         <div class="box">
-          <div class="date">
-            <div>
-              {{ passage.time|date:'F j, Y' }}
-            </div>
-            <hr />
-          </div>
-
-          <div>
+          <div class="max-lines">
             {{ passage|safe }}
           </div>
-
           <div class="footer">
-            [<a href="{% url 'Test:editPassageEditor' passage.pk %}">edit</a>] &nbsp;
             [<a href="{% url 'Test:passageDetail' passage.pk %}">detail</a>]
           </div>
         </div>
