@@ -14,7 +14,10 @@ class Passage(models.Model):
         tags_include = user.userprofile.tags_include.all()
         tags_exclude = user.userprofile.tags_exclude.all()
         if len(tags_include) > 0:
-            questions = Question.objects.filter(tags__in=tags_include)
+            #questions = Question.objects.filter(tags__in=tags_include)
+            questions = Question.objects.all()
+            for tag_include in tags_include:
+                questions = questions.filter(tags__in=[tag_include])
         else:
             questions = Question.objects.all()
         questions = questions.exclude(tags__in=tags_exclude)
@@ -41,7 +44,10 @@ class Question(models.Model):
         tags_include = user.userprofile.tags_include.all()
         tags_exclude = user.userprofile.tags_exclude.all()
         if len(tags_include) > 0:
-            questions = Question.objects.filter(tags__in=tags_include)
+            #questions = Question.objects.filter(tags__in=tags_include)
+            questions = Question.objects.all()
+            for tag_include in tags_include:
+                questions = questions.filter(tags__in=[tag_include])
         else:
             questions = Question.objects.all()
         questions = questions.exclude(tags__in=tags_exclude)
@@ -56,7 +62,10 @@ class Question(models.Model):
         tags_include = user.userprofile.tags_include.all()
         tags_exclude = user.userprofile.tags_exclude.all()
         if len(tags_include) > 0:
-            questions = Question.objects.filter(tags__in=tags_include)
+            #questions = Question.objects.filter(tags__in=tags_include)
+            questions = Question.objects.all()
+            for tag_include in tags_include:
+                questions = questions.filter(tags__in=[tag_include])
         else:
             questions = Question.objects.all()
         questions = questions.exclude(tags__in=tags_exclude)
