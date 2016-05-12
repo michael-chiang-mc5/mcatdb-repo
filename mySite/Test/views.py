@@ -190,7 +190,8 @@ def addQuestion(request):
         question.passage = Passage.objects.get(pk=passage_pk)
     # save
     question.save()
-    return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
+    return passageOrStandaloneQuestionDetail(request,question.pk)
+
 def editQuestionEditor(request,question_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
@@ -212,7 +213,7 @@ def editQuestion(request,question_pk):
     question.text=form_text
     # save
     question.save()
-    return HttpResponseRedirect( reverse('Test:passageDetail',args=[question.passage.pk]) )
+    return passageOrStandaloneQuestionDetail(request,question.pk)
 def editQuestionAdminNotesEditor(request,question_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
@@ -236,7 +237,7 @@ def editQuestionAdminNotes(request,question_pk):
     question.adminNotes = form_text
     # save
     question.save()
-    return HttpResponseRedirect( reverse('Test:passageDetail',args=[question.passage.pk]) )
+    return passageOrStandaloneQuestionDetail(request,question.pk)
 
 # Methods to add and edit answers
 def addAnswerEditor(request,question_pk):
@@ -261,21 +262,26 @@ def addAnswer(request):
     answer.question = Question.objects.get(pk=question_pk)
     # save
     answer.save()
-    return HttpResponseRedirect( reverse('Test:passageDetail',args=[answer.question.passage.pk]) )
+    return passageOrStandaloneQuestionDetail(request,answer.question.pk)
 def deleteAnswer(request,answer_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
     answer = Answer.objects.get(pk=answer_pk)
-    passage_pk = answer.question.passage.pk
+    question_pk = answer.question
     answer.delete()
-    return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
+    return passageOrStandaloneQuestionDetail(request,question.pk)
 def deleteQuestion(request,question_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
     question = Question.objects.get(pk=question_pk)
-    passage_pk = question.passage.pk
-    question.delete()
-    return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
+    is_standalone = question.is_standalone()
+    if is_standalone:
+        question.delete()
+        return HttpResponseRedirect( reverse('Test:standaloneQuestionList') )
+    else:
+        passage_pk = question.passage.pk
+        question.delete()
+        return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
 def deletePassage(request,passage_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
@@ -305,7 +311,7 @@ def editAnswer(request,answer_pk):
     answer.text = form_text
     # save
     answer.save()
-    return HttpResponseRedirect( reverse('Test:passageDetail',args=[answer.question.passage.pk]) )
+    return passageOrStandaloneQuestionDetail(request,answer.question.pk)
 def editExplanationEditor(request,answer_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
@@ -327,7 +333,14 @@ def editExplanation(request,answer_pk):
     answer.explanation = form_text
     # save
     answer.save()
-    return HttpResponseRedirect( reverse('Test:passageDetail',args=[answer.question.passage.pk]) )
+    return passageOrStandaloneQuestionDetail(request,answer.question.pk)
+
+def passageOrStandaloneQuestionDetail(request, question_pk):
+    question = Question.objects.get(pk=question_pk)
+    if question.passage is None:
+        return HttpResponseRedirect( reverse('Test:questionDetail',args=[question.pk]))
+    else:
+        return HttpResponseRedirect( reverse('Test:passageDetail',args=[question.passage.pk]) )
 
 
 def markAnswerCorrect(request,answer_pk):
@@ -336,14 +349,14 @@ def markAnswerCorrect(request,answer_pk):
     answer = Answer.objects.get(pk=answer_pk)
     answer.correct = True
     answer.save()
-    return HttpResponseRedirect( reverse('Test:passageDetail',args=[answer.question.passage.pk]) )
+    return passageOrStandaloneQuestionDetail(request,answer.question.pk)
 def markAnswerIncorrect(request,answer_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
     answer = Answer.objects.get(pk=answer_pk)
     answer.correct = False
     answer.save()
-    return HttpResponseRedirect( reverse('Test:passageDetail',args=[answer.question.passage.pk]) )
+    return passageOrStandaloneQuestionDetail(request,answer.question.pk)
 
 def addTag(request,question_pk):
     if not request.user.is_superuser:

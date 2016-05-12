@@ -18,7 +18,7 @@ class Question(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     hidden = models.BooleanField(default=True)
-    passage = models.ForeignKey(Passage, blank=True, null=True)
+    passage = models.ForeignKey(Passage, blank=True, null=True) # null if a standalone question
     notes = models.TextField(blank=True, null=True)
     adminNotes = models.TextField()
     def __str__(self):
@@ -36,6 +36,9 @@ class Question(models.Model):
             return 'passage'
         else:
             return 'standaloneQuestion'
+    def is_standalone(self):
+        if self.passage == None:
+            return True
 
 class Answer(models.Model):
     time = models.DateTimeField(auto_now_add=True)
