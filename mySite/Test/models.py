@@ -9,8 +9,19 @@ class Passage(models.Model):
         return self.text
     def edit(self,text):
         self.text = text
-    def get_random_passage_pk():
-        random_passage = Passage.objects.order_by('?').first()
+    def get_random_passage_pk(user):
+        # filter by include/exclude tags
+        tags_include = user.userprofile.tags_include.all()
+        tags_exclude = user.userprofile.tags_exclude.all()
+        if len(tags_include) > 0:
+            questions = Question.objects.filter(tags__in=tags_include)
+        else:
+            questions = Question.objects.all()
+        questions = questions.exclude(tags__in=tags_exclude)
+        # get filtered passages
+        passages = Passage.objects.filter(question__in=questions).distinct()
+        random_integer = random.randint(0,passages.count()-1)
+        random_passage = passages[random_integer]
         return random_passage.pk
 
 # Question includes both passage-based questions and standalone questions
@@ -25,13 +36,35 @@ class Question(models.Model):
         return self.text
     def edit(self,text):
         self.text = text
-    def get_random_standalone_question_pk():
-        random_standalone_question = Question.objects.exclude(passage__isnull=False).order_by('?').first()
+    def get_random_standalone_question_pk(user):
+        # filter by include/exclude tags
+        tags_include = user.userprofile.tags_include.all()
+        tags_exclude = user.userprofile.tags_exclude.all()
+        if len(tags_include) > 0:
+            questions = Question.objects.filter(tags__in=tags_include)
+        else:
+            questions = Question.objects.all()
+        questions = questions.exclude(tags__in=tags_exclude)
+        # get standalone question
+        questions = questions.exclude(passage__isnull=False)
+        random_integer = random.randint(0,questions.count()-1)
+        random_standalone_question = questions[random_integer]
         return random_standalone_question.pk
-    def get_random_passage_or_standaloneQuestion():
-        num_passages = len(Passage.objects.all())
-        num_standaloneQuestions = len(Question.objects.exclude(passage__isnull=False))
-        random_integer = random.randint(0,num_passages+num_standaloneQuestions)
+    # returns 'standaloneQuestion' if question is a standalone question, or 'passage' if question is part of a passage
+    def get_random_passage_or_standaloneQuestion(user):
+        # filter by include/exclude tags
+        tags_include = user.userprofile.tags_include.all()
+        tags_exclude = user.userprofile.tags_exclude.all()
+        if len(tags_include) > 0:
+            questions = Question.objects.filter(tags__in=tags_include)
+        else:
+            questions = Question.objects.all()
+        questions = questions.exclude(tags__in=tags_exclude)
+        # get number of passages / standalone questions
+        num_passages = Passage.objects.filter(question__in=questions).distinct().count()
+        num_standaloneQuestions = questions.exclude(passage__isnull=False).count()
+        # randomly choose passage/standaloneQuestion
+        random_integer = random.randint(0,num_passages+num_standaloneQuestions-1)
         if random_integer < num_passages:
             return 'passage'
         else:

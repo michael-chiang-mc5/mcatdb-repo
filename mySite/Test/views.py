@@ -17,12 +17,13 @@ def hideEditTools(request):
     return HttpResponse("done")
 
 def randomQuestion(request):
-    passage_or_standaloneQuestion = Question.get_random_passage_or_standaloneQuestion()
+    user = request.user
+    passage_or_standaloneQuestion = Question.get_random_passage_or_standaloneQuestion(user)
     if passage_or_standaloneQuestion == 'passage':
-        passage_pk = Passage.get_random_passage_pk()
+        passage_pk = Passage.get_random_passage_pk(user)
         return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
     elif passage_or_standaloneQuestion == 'standaloneQuestion':
-        question_pk = Question.get_random_standalone_question_pk()
+        question_pk = Question.get_random_standalone_question_pk(user)
         return HttpResponseRedirect( reverse('Test:standaloneQuestionDetail',args=[question_pk]) )
 
 def submitPassageAnswers(request):
