@@ -1,16 +1,22 @@
+window.fresh = true
+
 // Allow for de-selecting answers, turn selected answers blue
 $(document).ready(function() {
   $('.answer-box').click(function() {
-    if ($(this).find('input:radio')[0].checked == true ) {
-      $(this).find('input:radio')[0].checked = false;
-      $(this).removeClass('selected-answer');
-      event.stopPropagation();
-    } else {
-      $(this).find('input:radio')[0].checked = true;
-      $(this).parent().children('.answer-box').removeClass('selected-answer');
-      $(this).addClass('selected-answer');
-      event.stopPropagation();
+
+    if (fresh) {
+      if ($(this).find('input:radio')[0].checked == true ) {
+        $(this).find('input:radio')[0].checked = false;
+        $(this).removeClass('selected-answer');
+        event.stopPropagation();
+      } else {
+        $(this).find('input:radio')[0].checked = true;
+        $(this).parent().children('.answer-box').removeClass('selected-answer');
+        $(this).addClass('selected-answer');
+        event.stopPropagation();
+      }
     }
+
   });
 });
 
@@ -29,20 +35,26 @@ $(document).ready(function() {
           var answer_box = $(this)
           // if answer is correct, make question background green and display header-correct
           if (answer_box.hasClass('selected-answer') && answer_box.hasClass('answer-correct')) {
-            question_box.children('.header-correct').removeClass('hidden')
+            question_box.children('.header-correct').show()
           }
           // if answer is incorrect, make question background red
           if (answer_box.hasClass('selected-answer') && answer_box.hasClass('answer-incorrect')) {
-            question_box.children('.header-incorrect').removeClass('hidden')
+            question_box.children('.header-incorrect').show()
           }
         });
       } else {
         // no answer selected so incorrect
-        question_box.children('.header-incorrect').removeClass('hidden')
+        question_box.children('.header-incorrect').show()
       }
 
 
     });
+
+
+    // disable radio buttons, submit buttons
+    $(this).hide()
+    fresh = false
+
 
   });
 });
@@ -60,13 +72,29 @@ $(document).ready(function() {
   });
 });
 
-// Toggle admin tools
-$(document).on('click', "#toggle-admin-tools", function(){
+// Toggle edit mode
+$(document).on('click', "#show-edit-tools", function(){
   $.ajax({
     type        : 'GET', // define the type of HTTP verb we want to use (POST for our form)
-    url         : '/Test/toggleAdminTools/', // the url where we want to POST
+    url         : '/Test/showEditTools/', // the url where we want to POST
   }).done(function(data) {
-    $('.admin-tools').toggle()
+    $('.admin-tools').show()
+    $('.question-box').children('.header-correct').show()
+    $('.question-box').children('.header-incorrect').show()
+    $('.explanation').show()
+
+  });
+});
+$(document).on('click', "#hide-edit-tools", function(){
+  $.ajax({
+    type        : 'GET', // define the type of HTTP verb we want to use (POST for our form)
+    url         : '/Test/hideEditTools/', // the url where we want to POST
+  }).done(function(data) {
+    $('.admin-tools').hide()
+    $('.question-box').children('.header-correct').hide()
+    $('.question-box').children('.header-incorrect').hide()
+    $('.explanation').hide()
+
   });
 });
 

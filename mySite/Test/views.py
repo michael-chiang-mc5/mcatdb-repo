@@ -5,14 +5,25 @@ from django.core.urlresolvers import reverse
 from MCEditor.views import editor
 from MCBase.views import *
 
-def toggleAdminTools(request):
+def showEditTools(request):
     userProfile = request.user.userprofile
-    if userProfile.seeAdminTools == True:
-        userProfile.seeAdminTools = False
-    else:
-        userProfile.seeAdminTools = True
+    userProfile.seeAdminTools = True
     userProfile.save()
     return HttpResponse("done")
+def hideEditTools(request):
+    userProfile = request.user.userprofile
+    userProfile.seeAdminTools = False
+    userProfile.save()
+    return HttpResponse("done")
+
+def randomQuestion(request):
+    passage_or_standaloneQuestion = Question.get_random_passage_or_standaloneQuestion()
+    if passage_or_standaloneQuestion == 'passage':
+        passage_pk = Passage.get_random_passage_pk()
+        return passageDetail(request,passage_pk)
+    elif passage_or_standaloneQuestion == 'standaloneQuestion':
+        question_pk = Question.get_random_standalone_question_pk()
+        return questionDetail(request,question_pk)
 
 def submitPassageAnswers(request):
     for key in request.POST:
@@ -51,7 +62,7 @@ def passageDetail(request,passage_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
     passage = Passage.objects.get(pk=passage_pk)
-    questions = passage.question_set.all()
+    questions = passage.question_set.all().order_by('time')
     context = {'passage':passage,'questions':questions}
     return render(request, 'Test/passageDetail.html', context)
 
@@ -132,6 +143,28 @@ def editPassage(request,passage_pk):
     passage.text = form_text
     passage.save()
     return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
+def editPassageAdminNotesEditor(request,passage_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
+    submit_url = reverse('Test:editPassageAdminNotes',args=[passage_pk])
+    form_data = {}
+    header = "Edit admin notes for passage"
+    # get initial text
+    passage = Passage.objects.get(pk=passage_pk)
+    initial_text = passage.adminNotes
+    if initial_text == None:
+        initial_text = ''
+    # return editor
+    html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
+    return html
+def editPassageAdminNotes(request,passage_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
+    form_text = request.POST.get("form-text")
+    passage = Passage.objects.get(pk=passage_pk)
+    passage.adminNotes = form_text
+    passage.save()
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
 
 # Methods to add and edit questions
 def addQuestionEditor(request,passage_pk):
@@ -177,6 +210,30 @@ def editQuestion(request,question_pk):
     form_text = request.POST.get("form-text")
     question = Question.objects.get(pk=question_pk)
     question.text=form_text
+    # save
+    question.save()
+    return HttpResponseRedirect( reverse('Test:passageDetail',args=[question.passage.pk]) )
+def editQuestionAdminNotesEditor(request,question_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
+    submit_url = reverse('Test:editQuestionAdminNotes',args=[question_pk])
+    form_data = {}
+    header = "Edit a question"
+    # get initial text
+    question = Question.objects.get(pk=question_pk)
+    initial_text = question.adminNotes
+    if initial_text == None:
+        initial_text = ''
+    # return html
+    html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
+    return html
+def editQuestionAdminNotes(request,question_pk):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
+    # get question text
+    form_text = request.POST.get("form-text")
+    question = Question.objects.get(pk=question_pk)
+    question.adminNotes = form_text
     # save
     question.save()
     return HttpResponseRedirect( reverse('Test:passageDetail',args=[question.passage.pk]) )

@@ -6,7 +6,10 @@ urlpatterns = [
     url(r'^deleteQuestion/(?P<question_pk>[0-9]+)/$', views.deleteQuestion, name='deleteQuestion'),
     url(r'^deletePassage/(?P<passage_pk>[0-9]+)/$', views.deletePassage, name='deletePassage'),
 
-    url(r'^toggleAdminTools/$', views.toggleAdminTools, name='toggleAdminTools'),
+    url(r'^hideEditTools/$', views.hideEditTools, name='hideEditTools'),
+    url(r'^showEditTools/$', views.showEditTools, name='showEditTools'),
+
+    url(r'^randomQuestion/$', views.randomQuestion, name='randomQuestion'),
 
     url(r'^submitPassageAnswers/$', views.submitPassageAnswers, name='submitPassageAnswers'),
 
@@ -27,12 +30,17 @@ urlpatterns = [
     url(r'^addPassageEditor/$', views.addPassageEditor, name='addPassageEditor'),
     url(r'^editPassage/(?P<passage_pk>[0-9]+)/$', views.editPassage, name='editPassage'),
     url(r'^editPassageEditor/(?P<passage_pk>[0-9]+)/$', views.editPassageEditor, name='editPassageEditor'),
+    url(r'^editPassageAdminNotes/(?P<passage_pk>[0-9]+)/$', views.editPassageAdminNotes, name='editPassageAdminNotes'),
+    url(r'^editPassageAdminNotesEditor/(?P<passage_pk>[0-9]+)/$', views.editPassageAdminNotesEditor, name='editPassageAdminNotesEditor'),
 
     # add or edit questions
     url(r'^addQuestionEditor/(?P<passage_pk>[0-9]+)/$', views.addQuestionEditor, name='addQuestionEditor'),
     url(r'^addQuestion/$', views.addQuestion, name='addQuestion'),
     url(r'^editQuestionEditor/(?P<question_pk>[0-9]+)/$', views.editQuestionEditor, name='editQuestionEditor'),
     url(r'^editQuestion/(?P<question_pk>[0-9]+)/$', views.editQuestion, name='editQuestion'),
+    url(r'^editQuestionAdminNotesEditor/(?P<question_pk>[0-9]+)/$', views.editQuestionAdminNotesEditor, name='editQuestionAdminNotesEditor'),
+    url(r'^editQuestionAdminNotes/(?P<question_pk>[0-9]+)/$', views.editQuestionAdminNotes, name='editQuestionAdminNotes'),
+
 
     # add or edit answers
     url(r'^addAnswerEditor/(?P<question_pk>[0-9]+)/$', views.addAnswerEditor, name='addAnswerEditor'),
