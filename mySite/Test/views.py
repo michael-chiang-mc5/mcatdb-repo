@@ -23,7 +23,7 @@ def randomQuestion(request):
         return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
     elif passage_or_standaloneQuestion == 'standaloneQuestion':
         question_pk = Question.get_random_standalone_question_pk()
-        return HttpResponseRedirect( reverse('Test:questionDetail',args=[question_pk]) )
+        return HttpResponseRedirect( reverse('Test:standaloneQuestionDetail',args=[question_pk]) )
 
 def submitPassageAnswers(request):
     for key in request.POST:
@@ -72,7 +72,7 @@ def standaloneQuestionList(request):
     questions = Question.objects.exclude(passage__isnull=False)
     context = {'questions':questions}
     return render(request, 'Test/questionList.html', context)
-def questionDetail(request,question_pk):
+def standaloneQuestionDetail(request,question_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
     question = Question.objects.get(pk=question_pk)
@@ -82,7 +82,7 @@ def questionDetail(request,question_pk):
         passage = None;
     tags = question.tags.all()
     context = {'passage':passage, 'question':question}
-    return render(request, 'Test/questionDetail.html', context)
+    return render(request, 'Test/standaloneQuestionDetail.html', context)
 def questionUserView(request,question_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
@@ -337,7 +337,7 @@ def editExplanation(request,answer_pk):
 def passageOrStandaloneQuestionDetail(request, question_pk):
     question = Question.objects.get(pk=question_pk)
     if question.passage is None:
-        return HttpResponseRedirect( reverse('Test:questionDetail',args=[question.pk]))
+        return HttpResponseRedirect( reverse('Test:standaloneQuestionDetail',args=[question.pk]))
     else:
         return HttpResponseRedirect( reverse('Test:passageDetail',args=[question.passage.pk]) )
 

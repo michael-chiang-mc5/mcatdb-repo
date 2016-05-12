@@ -12,7 +12,7 @@
 
 {% block body_block %}
   {% if request.user.is_superuser %}
-    <a href="{% url 'Test:questionDetail' question.pk %}">adminView</a>
+    <a href="{% url 'Test:standaloneQuestionDetail' question.pk %}">adminView</a>
   {% endif %}
 
   <div class="box background-green">

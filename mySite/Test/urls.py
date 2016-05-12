@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^passageDetail/(?P<passage_pk>[0-9]+)/$', views.passageDetail, name='passageDetail'),
 
     url(r'^standaloneQuestionList/$', views.standaloneQuestionList, name='standaloneQuestionList'),
-    url(r'^questionDetail/(?P<question_pk>[0-9]+)/$', views.questionDetail, name='questionDetail'),
+    url(r'^standaloneQuestionDetail/(?P<question_pk>[0-9]+)/$', views.standaloneQuestionDetail, name='standaloneQuestionDetail'),
     url(r'^questionUserView/(?P<question_pk>[0-9]+)/$', views.questionUserView, name='questionUserView'),
 
 
