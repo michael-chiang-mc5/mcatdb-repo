@@ -28,6 +28,14 @@ $(document).ready(function() {
     $(this).parent().children('.question-box').each(function () {
       var question_box = $(this)
 
+      // bold correct answers
+      question_box.children('.answer-box').each(function() {
+        var answer_box = $(this)
+        if (answer_box.hasClass('answer-correct')) {
+          answer_box.css("font-weight","Bold");
+        }
+      });
+
       // check if an answer is selected
       if (question_box.children('.answer-box').hasClass('selected-answer')) {
         // iterate through answers
@@ -46,6 +54,7 @@ $(document).ready(function() {
         // no answer selected so incorrect
         question_box.children('.header-incorrect').show()
       }
+
 
 
     });
