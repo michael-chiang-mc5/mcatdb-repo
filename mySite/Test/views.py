@@ -76,13 +76,12 @@ def questionDetail(request,question_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
     question = Question.objects.get(pk=question_pk)
-    answers = Answer.objects.filter(question=question)
     try:
         passage = question.passage
     except:
         passage = None;
     tags = question.tags.all()
-    context = {'passage':passage, 'question':question, 'answers':answers, 'tags':tags}
+    context = {'passage':passage, 'question':question}
     return render(request, 'Test/questionDetail.html', context)
 def questionUserView(request,question_pk):
     if not request.user.is_superuser:
@@ -375,6 +374,9 @@ def removeTag(request,question_pk):
     question = Question.objects.get(pk=question_pk)
     tag.questions.remove(question)
     tag.save()
+    # delete tag if it does not correspond to any question
+    if tag.questions.count() == 0:
+        tag.delete()
     return editTags(request,question_pk)
 def editTags(request,question_pk):
     if not request.user.is_superuser:

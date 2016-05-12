@@ -2,6 +2,7 @@ from django.template import Library
 from MCBase.config_navbar import *
 import re
 from django.core.urlresolvers import reverse, NoReverseMatch
+import random
 register = Library()
 
 # Returns a list containing range made from given value
@@ -39,3 +40,13 @@ def active(context, pattern_or_urlname):
     if re.search(pattern, path):
         return 'active'
     return ''
+
+# Usage
+# {% for item in list|shuffle %}
+#    <li>{{ item }}</li>
+# {% endfor %}
+@register.filter
+def shuffle(arg):
+    tmp = list(arg)[:]
+    random.shuffle(tmp)
+    return tmp

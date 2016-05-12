@@ -1,3 +1,4 @@
+{% load MCBase_templatetags %}
 
 <div class="question-box">
   <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
@@ -20,7 +21,7 @@
   </div>
   <!-- answers -->
   <hr />
-  {% for answer in question.answer_set.all %}
+  {% for answer in question.answer_set.all|shuffle %}
     <div class="answer-box question{{ question.pk }} {% if answer.correct %}answer-correct{% else %}answer-incorrect{% endif %}">
       <input type="radio" name="question{{ question.pk }}" value="answer{{ answer.pk }}" class="hidden" />
       {{ answer|safe }}
