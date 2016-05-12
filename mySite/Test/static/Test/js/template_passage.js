@@ -33,6 +33,13 @@ $(document).ready(function() {
         var answer_box = $(this)
         if (answer_box.hasClass('answer-correct')) {
           answer_box.css("font-weight","Bold");
+          answer_box.css("font-size","18px");
+
+          // mathjax must be set bold separately
+          answer_box.find('.math').each(function() {
+            $(this).css("font-weight","Bold");
+          });
+
         }
       });
 

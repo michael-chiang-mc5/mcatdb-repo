@@ -9,6 +9,11 @@
     overflow: scroll;
 }
 
+.bold {
+  font-weight: bold;
+
+}
+
 .header-correct {
   background-color: rgba(65, 205, 117, 0.4) !important ;
 }

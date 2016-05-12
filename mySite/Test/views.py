@@ -20,10 +20,10 @@ def randomQuestion(request):
     passage_or_standaloneQuestion = Question.get_random_passage_or_standaloneQuestion()
     if passage_or_standaloneQuestion == 'passage':
         passage_pk = Passage.get_random_passage_pk()
-        return passageDetail(request,passage_pk)
+        return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
     elif passage_or_standaloneQuestion == 'standaloneQuestion':
         question_pk = Question.get_random_standalone_question_pk()
-        return questionDetail(request,question_pk)
+        return HttpResponseRedirect( reverse('Test:questionDetail',args=[question_pk]) )
 
 def submitPassageAnswers(request):
     for key in request.POST:
