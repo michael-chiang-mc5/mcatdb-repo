@@ -1,3 +1,3 @@
 website_name = "mcatDB"
-left_side_nav = ['random question',]
-left_side_href = ['Test:randomQuestion',]
+left_side_nav = ['home','random question',]
+left_side_href = ['myContent:index','Test:randomQuestion',]
