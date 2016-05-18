@@ -5,6 +5,20 @@ from django.core.urlresolvers import reverse
 from MCEditor.views import editor
 from MCBase.views import *
 
+def adminTags(request):
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
+    questions = Question.objects.all()
+
+    for question in questions:
+        tags = Tag.objects.extra( select={'lower_text': 'lower(text)'}).order_by("lower_text").all() # tags sorted in alphabetical order
+        question.taglist = tags
+        for i,tag in enumerate(question.taglist):
+            question.taglist[i].checked = tag in question.tags.all()
+
+    context = {'questions':questions}
+    return render(request, 'Test/adminTags.html', context)
+
 def showEditTools(request):
     userProfile = request.user.userprofile
     userProfile.seeAdminTools = True
@@ -357,6 +371,19 @@ def markAnswerIncorrect(request,answer_pk):
     answer.correct = False
     answer.save()
     return passageOrStandaloneQuestionDetail(request,answer.question.pk)
+
+def massEditTags(request,question_pk):
+    tags = Tag.objects.all()
+    for tag in tags:
+        # tag is checked
+        if request.POST.get(tag.text,False):
+            question = Question.objects.get(pk=question_pk)
+            tag.questions.add(question)
+        else:
+            question = Question.objects.get(pk=question_pk)
+            tag.questions.remove(question)
+    return HttpResponse("done")
+
 
 def addTag(request,question_pk):
     if not request.user.is_superuser:

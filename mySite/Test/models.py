@@ -9,7 +9,8 @@ class Passage(models.Model):
         return self.text
     def edit(self,text):
         self.text = text
-    def get_random_passage_pk(user):
+    @classmethod
+    def get_random_passage_pk(self,user):
         # filter by include/exclude tags
         tags_include = user.userprofile.tags_include.all()
         tags_exclude = user.userprofile.tags_exclude.all()
@@ -96,7 +97,8 @@ class Tag(models.Model):
     def __str__(self):
         return self.text
     # saves a new class object if one does not already exist
-    def newTag(text):
+    @classmethod
+    def newTag(self,text):
         tags = Tag.objects.filter(text=text)
         if len(tags)==0:
             tag = Tag(text=text)

@@ -1,0 +1,78 @@
+{% extends "MCBase/base-extended.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'UserProfile/css/editProfileInterface.css' %}">
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/javascript" src="{% static 'Test/js/adminTags.js' %}"></script>
+
+{% endblock %}
+
+{% block title %}
+  question list
+{% endblock %}
+
+{% block body_block %}
+
+  {% if questions %}
+
+
+
+
+
+
+
+    {% for question in questions %}
+      <div class="row box">
+
+        <div class="col-md-5">
+
+            <div class="date">
+              {{ question.time|date:'F j, Y' }}
+            </div>
+
+            <div>
+              {{ question|safe }}
+            </div>
+
+            <div class="footer">
+              [<a href="{% url 'Test:editQuestionEditor' question.pk %}">edit</a>] &nbsp;
+              [<a href="{% url 'Test:standaloneQuestionDetail' question.pk %}">detail</a>]
+            </div>
+      </div>
+
+      <form class="note-form" role="form" action="{% url 'Test:massEditTags' question.pk %}" method=POST>
+        {% csrf_token %}
+
+        <div class="col-md-5">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+              <tbody>
+                {% for tag in question.taglist %}
+                  {% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
+                  <td class="text" align="left">
+                    <div class="inline">
+                      <input onclick="gYes(8)" type="checkbox" id="gy8" name="{{ tag }}" value="include" {% if tag.checked %} checked {% endif %}>
+                    </div>
+                    {{ tag }}
+                  </td>
+                  {% if forloop.counter|divisibleby:3 %}</tr>{% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
+    </form>
+
+    <button class="btn-sm btn-primary" type="submit">change</button>
+
+    <div class="col-md-1">
+    </div>
+
+
+
+    </div>
+    {% endfor %}
+  {% else %}
+    No questions
+  {% endif %}
+
+{% endblock %}
