@@ -16,9 +16,10 @@ class UserProfile(models.Model):
             return self.alias
         else:
             return user.get_username()
-    def exists(user):
+    @classmethod
+    def exists(self,user_obj):
         try:
-            UserProfile.objects.get(user=user)
+            UserProfile.objects.get(user=user_obj)
         except:
             return False
         else:

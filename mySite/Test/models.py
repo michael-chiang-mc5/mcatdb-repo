@@ -38,7 +38,8 @@ class Question(models.Model):
         return self.text
     def edit(self,text):
         self.text = text
-    def get_random_standalone_question_pk(user):
+    @classmethod
+    def get_random_standalone_question_pk(self,user):
         # filter by include/exclude tags
         tags_include = user.userprofile.tags_include.all()
         tags_exclude = user.userprofile.tags_exclude.all()
@@ -55,7 +56,8 @@ class Question(models.Model):
         random_standalone_question = questions[random_integer]
         return random_standalone_question.pk
     # returns 'standaloneQuestion' if question is a standalone question, or 'passage' if question is part of a passage
-    def get_random_passage_or_standaloneQuestion(user):
+    @classmethod
+    def get_random_passage_or_standaloneQuestion(self,user):
         # filter by include/exclude tags
         tags_include = user.userprofile.tags_include.all()
         tags_exclude = user.userprofile.tags_exclude.all()
