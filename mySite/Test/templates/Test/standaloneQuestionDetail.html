@@ -8,6 +8,11 @@
   <script type="text/javascript" src="{% static 'Test/js/resize_img.js' %}"></script>
   -->
 
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: {extensions: ["mhchem.js"]}
+  });
+  </script>
   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   <link rel="stylesheet" href="{% static 'Test/css/passageDetail.css' %}">
   <script type="text/javascript" src="{% static 'Test/js/template_passage.js' %}"></script>
@@ -16,7 +21,7 @@
 {% endblock %}
 
 {% block title %}
-  question list
+  standalone question detail
 {% endblock %}
 
 {% block body_block %}

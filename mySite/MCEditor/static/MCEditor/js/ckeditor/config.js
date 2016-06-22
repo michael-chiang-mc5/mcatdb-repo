@@ -31,7 +31,7 @@ CKEDITOR.editorConfig = function( config ) {
   //                        "link:info:linkType;link:info:protocol"
   config.specialChars = [ 'α','β','ξ','δ','ε','φ','γ','η','ι','σ','κ','λ','μ','ν','ο','π','θ','ρ','σ','τ','υ','ϝ','ω','χ','ψ','ζ'  ];
 
-  config.extraPlugins = 'mathjax,confighelper,image2,devtools'; // put 'devtools' if you want to know editor IDs
+  config.extraPlugins = 'mathjax,confighelper,image2'; // put 'devtools' if you want to know editor IDs
   config.mathJaxLib = 'http://cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML';
 };
 

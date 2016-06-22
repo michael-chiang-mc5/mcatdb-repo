@@ -3,6 +3,11 @@
 
 {% block javascript %}
   <link rel="stylesheet" href="{% static 'Test/css/admin.css' %}">
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: {extensions: ["mhchem.js"]}
+  });
+  </script>
   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   <script type="text/javascript" src="{% static 'Test/js/resize_img.js' %}"></script>
 {% endblock %}

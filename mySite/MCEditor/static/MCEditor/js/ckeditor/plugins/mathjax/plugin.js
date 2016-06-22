@@ -339,6 +339,12 @@
 									'} );' +
 								'</script>' +
 
+								// This is to enable mhchem in preview
+								'<script type="text/x-mathjax-config">' +
+								  'MathJax.Hub.Config({' +
+								    'TeX: {extensions: ["mhchem.js"]}' +
+								  '});' +
+							  '</script>' +
 								// Load MathJax lib.
 								'<script src="' + ( editor.config.mathJaxLib ) + '"></script>' +
 							'</head>' +
