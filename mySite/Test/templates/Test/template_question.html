@@ -45,7 +45,7 @@
   <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
     [<a href="{% url 'Test:editQuestionEditor' question.pk %}">edit question</a>] &nbsp;
     [<a href="{% url 'Test:addAnswerEditor' question.pk %}">Add answer</a>] &nbsp;
-    [<a href="{% url 'Test:deleteQuestion' question.pk %}">delete</a>] &nbsp;
+    [<a href="{% url 'Test:deleteQuestion' question.pk %}">Delete question</a>] &nbsp;
     <hr />
     <div>
       {{ question.adminNotes|safe }}

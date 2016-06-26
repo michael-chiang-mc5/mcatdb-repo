@@ -4,11 +4,16 @@
 {% block javascript %}
   <link rel="stylesheet" href="{% static 'Test/css/passageDetail.css' %}">
   <script type="text/javascript" src="{% static 'Test/js/template_passage.js' %}"></script>
-
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: {extensions: ["mhchem.js"]}
+  });
+  </script>
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> <!-- TODO: download this to static -->
 {% endblock %}
 
 {% block title %}
-  passage list
+  passage detail
 {% endblock %}
 
 {% block body_block %}
