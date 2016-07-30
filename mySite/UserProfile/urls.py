@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^editProfileInterface/$', views.editProfileInterface, name='editProfileInterface'),
     url(r'^editAlias/$', views.editAlias, name='editAlias'),
     url(r'^editUserTags/$', views.editUserTags, name='editUserTags'),
+    url(r'^editUserDates/$', views.editUserDates, name='editUserDates'),
 ]

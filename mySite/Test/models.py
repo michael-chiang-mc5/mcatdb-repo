@@ -1,5 +1,6 @@
 from django.db import models
 import random
+import datetime
 
 class Passage(models.Model):
     time = models.DateTimeField(auto_now_add=True)
@@ -9,23 +10,6 @@ class Passage(models.Model):
         return self.text
     def edit(self,text):
         self.text = text
-    @classmethod
-    def get_random_passage_pk(self,user):
-        # filter by include/exclude tags
-        tags_include = user.userprofile.tags_include.all()
-        tags_exclude = user.userprofile.tags_exclude.all()
-        if len(tags_include) > 0:
-            questions = Question.objects.all()
-            for tag_include in tags_include:
-                questions = questions.filter(tags__in=[tag_include])
-        else:
-            questions = Question.objects.all()
-        questions = questions.exclude(tags__in=tags_exclude)
-        # get filtered passages
-        passages = Passage.objects.filter(question__in=questions).distinct()
-        random_integer = random.randint(0,passages.count()-1)
-        random_passage = passages[random_integer]
-        return random_passage.pk
 
 # Question includes both passage-based questions and standalone questions
 class Question(models.Model):
@@ -39,24 +23,9 @@ class Question(models.Model):
         return self.text
     def edit(self,text):
         self.text = text
-    @classmethod
-    def get_random_standalone_question_pk(self,user):
-        # filter by include/exclude tags
-        tags_include = user.userprofile.tags_include.all()
-        tags_exclude = user.userprofile.tags_exclude.all()
-        if len(tags_include) > 0:
-            questions = Question.objects.all()
-            for tag_include in tags_include:
-                questions = questions.filter(tags__in=[tag_include])
-        else:
-            questions = Question.objects.all()
-        questions = questions.exclude(tags__in=tags_exclude)
-        # get standalone question
-        questions = questions.exclude(passage__isnull=False)
-        random_integer = random.randint(0,questions.count()-1)
-        random_standalone_question = questions[random_integer]
-        return random_standalone_question.pk
-    # returns 'standaloneQuestion' if question is a standalone question, or 'passage' if question is part of a passage
+    # returns dictionary with fields:
+    #   type: passage or standaloneQuestion
+    #   pk: id of passage or standaloneQuestion
     @classmethod
     def get_random_passage_or_standaloneQuestion(self,user):
         # filter by include/exclude tags
@@ -69,15 +38,26 @@ class Question(models.Model):
         else:
             questions = Question.objects.all()
         questions = questions.exclude(tags__in=tags_exclude)
-        # get number of passages / standalone questions
-        num_passages = Passage.objects.filter(question__in=questions).distinct().count()
-        num_standaloneQuestions = questions.exclude(passage__isnull=False).count()
-        # randomly choose passage/standaloneQuestion
-        random_integer = random.randint(0,num_passages+num_standaloneQuestions-1)
-        if random_integer < num_passages:
-            return 'passage'
+        # filter by question creation date
+        if user.userprofile.mindate is None:
+            mindate = datetime.datetime.min
         else:
-            return 'standaloneQuestion'
+            mindate = user.userprofile.mindate
+        if user.userprofile.maxdate is None:
+            maxdate = datetime.datetime.max
+        else:
+            maxdate = user.userprofile.maxdate
+        questions = questions.filter(time__range=[mindate, maxdate])
+
+        # get passages and standalone questions
+        passages = Passage.objects.filter(question__in=questions).distinct()
+        standaloneQuestions = questions.exclude(passage__isnull=False)
+        # randomly choose passage/standaloneQuestion
+        random_integer = random.randint(0,passages.count()+standaloneQuestions.count()-1)
+        if random_integer < passages.count():
+            return {'type':'passage','pk':passages[random_integer].pk}
+        else:
+            return {'type':'standaloneQuestion','pk':standaloneQuestions[random_integer-passages.count()].pk}
     def is_standalone(self):
         if self.passage == None:
             return True

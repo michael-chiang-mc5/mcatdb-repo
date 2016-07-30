@@ -8,6 +8,8 @@ class UserProfile(models.Model):
     tags_include = models.ManyToManyField(Tag, blank=True, related_name="tags_include")  # to access tags_include from UserProfile instance, userProfile.tags_include.all()
     tags_exclude = models.ManyToManyField(Tag, blank=True, related_name="tags_exclude")  # to access tags_include from UserProfile instance, userProfile.tags_exclude.all()
     seeAdminTools = models.BooleanField(default=False)
+    mindate = models.DateTimeField(blank=True,null=True) # when showing random questions, only include questions created between mintime, maxtime
+    maxdate = models.DateTimeField(blank=True,null=True)
 
     def __str__(self):
         return str(self.user)

@@ -32,12 +32,12 @@ def hideEditTools(request):
 
 def randomQuestion(request):
     user = request.user
-    passage_or_standaloneQuestion = Question.get_random_passage_or_standaloneQuestion(user)
-    if passage_or_standaloneQuestion == 'passage':
-        passage_pk = Passage.get_random_passage_pk(user)
+    d = Question.get_random_passage_or_standaloneQuestion(user)
+    if d['type'] == 'passage':
+        passage_pk = d['pk']
         return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
-    elif passage_or_standaloneQuestion == 'standaloneQuestion':
-        question_pk = Question.get_random_standalone_question_pk(user)
+    elif d['type'] == 'standaloneQuestion':
+        question_pk = d['pk']
         return HttpResponseRedirect( reverse('Test:standaloneQuestionDetail',args=[question_pk]) )
 
 def submitPassageAnswers(request):

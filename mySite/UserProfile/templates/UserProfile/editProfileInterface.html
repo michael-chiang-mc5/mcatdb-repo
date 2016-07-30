@@ -68,9 +68,38 @@
           <button class="btn btn-primary" type="submit">submit</button>
         </form>
       </div>
+    </div>
+  </div>
 
+  <div class=box>
+    <b>Date filters:</b>
+    <br />
+    This allows you to select what questions (date-wise) will pop up when you select a random question
+    <br />
+    <a pk="{{group.pk}}" class="edit-link pointer">click to edit</a>
+    <div class="editform" style="display: none;">
 
+      <div>
 
+        <form class="note-form" role="form" action="{% url 'UserProfile:editUserDates' %}" method=POST>
+          {% csrf_token %}
+
+          <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+          <link rel="stylesheet" href="/resources/demos/style.css">
+          <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+          <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+          <script>
+          $( function() {
+            $( ".datepicker" ).datepicker();
+          } );
+          </script>
+
+          <p>Minimum: <input type="text" name="mindate" class="datepicker" value="{% if mindate %}{{mindate|date:"m/d/Y"}}{% endif %}"></p>
+          <p>Maximum: <input type="text" name="maxdate" class="datepicker" value="{% if maxdate %}{{maxdate|date:"m/d/Y"}}{% endif %}"></p>
+          <button class="btn btn-primary" type="submit">submit</button>
+        </form>
+
+      </div>
     </div>
   </div>
 
