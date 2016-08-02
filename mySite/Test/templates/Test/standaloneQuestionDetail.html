@@ -25,11 +25,14 @@
 {% endblock %}
 
 {% block body_block %}
+
+  {% if request.user.is_superuser %}
   <div>
     [<a href="{% url 'Test:addQuestionEditor' 0 %}">Add standalone question</a>] &nbsp;
     [<a class="cursor-pointer" id="show-edit-tools">Show editing tools</a>] &nbsp;
     [<a class="cursor-pointer" id="hide-edit-tools">Hide editing tools</a>] &nbsp;
   </div>
+  {% endif %}
 
   {% include "Test/template_question.html" %}
 

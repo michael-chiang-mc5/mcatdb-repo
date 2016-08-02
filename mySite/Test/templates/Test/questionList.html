@@ -17,9 +17,11 @@
 {% endblock %}
 
 {% block body_block %}
-  [<a href="{% url 'Test:addQuestionEditor' 0 %}">Add standalone question</a>] &nbsp;
-  [<a href="{% url 'Test:adminPanel' %}">Back to admin panel</a>] &nbsp;
-  <hr />
+  {% if request.user.is_superuser %}
+    [<a href="{% url 'Test:addQuestionEditor' 0 %}">Add standalone question</a>] &nbsp;
+    [<a href="{% url 'Test:adminPanel' %}">Back to admin panel</a>] &nbsp;
+    <hr />
+  {% endif %}
 
   {% if questions %}
 
