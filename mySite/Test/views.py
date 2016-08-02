@@ -74,8 +74,8 @@ def passageList(request):
     return render(request, 'Test/passageList.html', context)
 # This displays a single passage with associated questions/answers
 def passageDetail(request,passage_pk):
-    if not request.user.is_superuser:
-        return HttpResponse("You are not a superuser")
+    #if not request.user.is_superuser:
+    #    return HttpResponse("You are not a superuser")
     passage = Passage.objects.get(pk=passage_pk)
     questions = passage.question_set.all().order_by('time')
     context = {'passage':passage,'questions':questions}
@@ -88,8 +88,8 @@ def standaloneQuestionList(request):
     context = {'questions':questions}
     return render(request, 'Test/questionList.html', context)
 def standaloneQuestionDetail(request,question_pk):
-    if not request.user.is_superuser:
-        return HttpResponse("You are not a superuser")
+    #if not request.user.is_superuser:
+    #    return HttpResponse("You are not a superuser")
     question = Question.objects.get(pk=question_pk)
     try:
         passage = question.passage
