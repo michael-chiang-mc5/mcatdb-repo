@@ -38,6 +38,8 @@ def randomQuestion(request):
         return HttpResponseRedirect( reverse('Test:passageDetail',args=[passage_pk]) )
     elif d['type'] == 'standaloneQuestion':
         question_pk = d['pk']
+        #hasExplanation = Question.objects.get(pk=question_pk).hasExplanation()
+        #return HttpResponse(str(question_pk) + ": " + str(hasExplanation))
         return HttpResponseRedirect( reverse('Test:standaloneQuestionDetail',args=[question_pk]) )
 
 def submitPassageAnswers(request):

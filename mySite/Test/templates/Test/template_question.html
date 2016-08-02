@@ -10,10 +10,10 @@
 
 
   <div class="{% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %} header-correct">
-    You are correct! Click <a class="cursor-pointer toggle-explanation">here</a> to toggle explanation.
+    You are correct! {% if question.hasExplanation %}Click <a class="cursor-pointer toggle-explanation">here</a> to toggle explanation. {% endif %}
   </div>
   <div class="{% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %} header-incorrect">
-    Wrong! Click <a class="cursor-pointer toggle-explanation">here</a> to toggle explanation.
+    Wrong! {% if question.hasExplanation %}Click <a class="cursor-pointer toggle-explanation">here</a> to toggle explanation.{% endif %}
   </div>
 
   <div>

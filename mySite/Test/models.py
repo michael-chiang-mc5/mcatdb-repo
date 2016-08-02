@@ -58,6 +58,15 @@ class Question(models.Model):
             return {'type':'passage','pk':passages[random_integer].pk}
         else:
             return {'type':'standaloneQuestion','pk':standaloneQuestions[random_integer-passages.count()].pk}
+    @property
+    def hasExplanation(self):
+        answers = self.answer_set.all()
+        hasExplanation = False
+        for answer in answers:
+            if len(answer.explanation) > 0:
+                hasExplanation = True
+        return hasExplanation
+
     def is_standalone(self):
         if self.passage == None:
             return True
