@@ -1,88 +1,11 @@
 from django.db import models
 import random
 import datetime
-
-class Passage(models.Model):
-    time = models.DateTimeField(auto_now_add=True)
-    text = models.TextField()
-    adminNotes = models.TextField()
-    def __str__(self):
-        return self.text
-    def edit(self,text):
-        self.text = text
-
-# Question includes both passage-based questions and standalone questions
-class Question(models.Model):
-    time = models.DateTimeField(auto_now_add=True)
-    text = models.TextField()
-    hidden = models.BooleanField(default=True)
-    passage = models.ForeignKey(Passage, blank=True, null=True) # null if a standalone question
-    notes = models.TextField(blank=True, null=True)
-    adminNotes = models.TextField()
-    def __str__(self):
-        return self.text
-    def edit(self,text):
-        self.text = text
-    # returns dictionary with fields:
-    #   type: passage or standaloneQuestion
-    #   pk: id of passage or standaloneQuestion
-    @classmethod
-    def get_random_passage_or_standaloneQuestion(self,user):
-        # filter by include/exclude tags
-        tags_include = user.userprofile.tags_include.all()
-        tags_exclude = user.userprofile.tags_exclude.all()
-        if len(tags_include) > 0:
-            questions = Question.objects.all()
-            for tag_include in tags_include:
-                questions = questions.filter(tags__in=[tag_include])
-        else:
-            questions = Question.objects.all()
-        questions = questions.exclude(tags__in=tags_exclude)
-        # filter by question creation date
-        if user.userprofile.mindate is None:
-            mindate = datetime.datetime.min
-        else:
-            mindate = user.userprofile.mindate
-        if user.userprofile.maxdate is None:
-            maxdate = datetime.datetime.max
-        else:
-            maxdate = user.userprofile.maxdate
-        questions = questions.filter(time__range=[mindate, maxdate])
-
-        # get passages and standalone questions
-        passages = Passage.objects.filter(question__in=questions).distinct()
-        standaloneQuestions = questions.exclude(passage__isnull=False)
-        # randomly choose passage/standaloneQuestion
-        random_integer = random.randint(0,passages.count()+standaloneQuestions.count()-1)
-        if random_integer < passages.count():
-            return {'type':'passage','pk':passages[random_integer].pk}
-        else:
-            return {'type':'standaloneQuestion','pk':standaloneQuestions[random_integer-passages.count()].pk}
-    @property
-    def hasExplanation(self):
-        answers = self.answer_set.all()
-        hasExplanation = False
-        for answer in answers:
-            if len(answer.explanation) > 0:
-                hasExplanation = True
-        return hasExplanation
-
-    def is_standalone(self):
-        if self.passage == None:
-            return True
-
-class Answer(models.Model):
-    time = models.DateTimeField(auto_now_add=True)
-    text = models.TextField()
-    question = models.ForeignKey(Question)
-    correct = models.BooleanField(default=False)
-    explanation = models.TextField()
-    def __str__(self):
-        return self.text
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 
 class Tag(models.Model):
     text = models.CharField(max_length=255, unique=True)
-    questions  = models.ManyToManyField(Question, blank=True, related_name="tags")  # to access tags from Question instance, question.tags.all()
     def __str__(self):
         return self.text
     # saves a new class object if one does not already exist
@@ -92,3 +15,92 @@ class Tag(models.Model):
         if len(tags)==0:
             tag = Tag(text=text)
             tag.save()
+
+# all SingleQuestion and Passage objects link to a QuestionContainer object
+# need to set content_object
+class QuestionContainer(models.Model):
+    time = models.DateTimeField(auto_now_add=True)
+    tags  = models.ManyToManyField(Tag, blank=True, related_name="questionContainers")  # to access questionContainers from tag instance, tag.questionContainers.all()
+    # implements generic foreign key to passage and question objects
+    # constructor: questionContainer = QuestionContainer(content_object=passage)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id') # To get singleQuestion or passage object, questionContainer.content_object
+    # random QuestionContainer object
+    @staticmethod
+    def random():
+        num = QuestionContainer.objects.all().count()
+        r = random.randint(0,num-1)
+        return QuestionContainer.objects.all()[r]
+    def questionContainer_pk(self):
+        return self.pk
+    def type(self):
+        return self.content_object.type()
+
+class Answer(models.Model):
+    time = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    explanation = models.TextField()
+    correct = models.BooleanField(default=False)
+    adminNotes = models.TextField()
+    def __str__(self):
+        return self.text
+    def editAdminNotes(self,text):
+        self.adminNotes = text
+    def question_pk(self):
+        return self.questions.all()[0].pk
+    def questionContainer_pk(self):
+        question = self.questions.all()[0]
+        return question.questionContainer_pk()
+
+# Question can be part of a passage, or it can be a single question
+class Question(models.Model):
+    time = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    adminNotes = models.TextField()
+    answers  = models.ManyToManyField(Answer, blank=True, related_name="questions")  # to access questions from answer instance, answer.questions.all()
+    questionContainer = GenericRelation(QuestionContainer)
+
+    def __str__(self):
+        return self.text
+    def edit(self,text):
+        self.text = text
+    def editAdminNotes(self,text):
+        self.adminNotes = text
+    # Returns True if at least one of the answers corresponding to question has an explanation
+    def hasExplanation(self):
+        answers = self.answers.all()
+        hasExplanation = False
+        for answer in answers:
+            if len(answer.explanation) > 0: # TODO: make a method
+                hasExplanation = True
+        return hasExplanation
+    def type(self):
+        return "question"
+    # return the pk of encapsulating questionContainer
+    def questionContainer_pk(self):
+        if len(self.passages.all()) > 0:
+            passage = self.passages.all()[0]
+            questionContainer = passage.questionContainer.all()[0]
+            return questionContainer.pk
+        else: # single question
+            questionContainer = self.questionContainer.all()[0]
+            return questionContainer.pk
+
+class Passage(models.Model):
+    time = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    adminNotes = models.TextField()
+    questions  = models.ManyToManyField(Question, blank=True, related_name="passages")  # to access passages from question instance, question.passages.all()
+    questionContainer = GenericRelation(QuestionContainer)
+
+    def __str__(self):
+        return self.text
+    def edit(self,text):
+        self.text = text
+    def editAdminNotes(self,text):
+        self.adminNotes = text
+    def type(self):
+        return "passage"
+    def questionContainer_pk(self):
+        return self.questionContainer.all()[0].pk

@@ -7,19 +7,19 @@
   MathJax.Hub.Config({
     TeX: {extensions: ["mhchem.js"]}
   });
-  </script>  
+  </script>
   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   <script type="text/javascript" src="{% static 'Test/js/adminTags.js' %}"></script>
 
 {% endblock %}
 
 {% block title %}
-  question list
+  tag admin
 {% endblock %}
 
 {% block body_block %}
 
-  {% if questions %}
+  {% if questionContainers %}
 
 
 
@@ -27,7 +27,7 @@
 
 
 
-    {% for question in questions %}
+  {% for questionContainer in questionContainers %}
       <div class="row box">
 
         <div class="col-md-5">
@@ -42,7 +42,6 @@
 
             <div class="footer">
               [<a href="{% url 'Test:editQuestionEditor' question.pk %}">edit</a>] &nbsp;
-              [<a href="{% url 'Test:standaloneQuestionDetail' question.pk %}">detail</a>]
             </div>
       </div>
 
@@ -77,7 +76,7 @@
     </div>
     {% endfor %}
   {% else %}
-    No questions
+    No questionContainers
   {% endif %}
 
 {% endblock %}

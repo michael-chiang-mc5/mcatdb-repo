@@ -11,10 +11,14 @@
 
 {% block body_block %}
   <div>
-    <a href="{% url 'Test:passageList' %}">add/edit passage-based questions</a>
+
+    <a href="{% url 'Test:addPassageEditor' %}">add passage-based questions</a>
     <br />
-    <a href="{% url 'Test:standaloneQuestionList' %}">add/edit standalone questions</a>
+    <a href="{% url 'Test:addQuestionEditor' 0 %}">add single question</a>
     <br />
-    <a href="{% url 'Test:adminTags' %}">edit tags</a>
+
+    <hr />
+
+    <a href="{% url 'Test:questionContainerList' %}">view list</a>
   </div>
 {% endblock %}
