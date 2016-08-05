@@ -1,0 +1,32 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'myContent/css/frontpage.css' %}">
+{% endblock %}
+
+{% block title %}
+  mcatDB
+{% endblock %}
+
+{% block body_block %}
+  <div class="content">
+
+    <!-- link to admin panel -->
+    {% if request.user.is_superuser %}
+      <div>
+        <a href="{% url 'Test:adminPanel' %}">admin panel</a>
+      </div>
+    {% endif %}
+
+    <!-- question of the day -->
+    {% if passage %}
+      is passage
+    {% else %}
+      is single question
+    {% endif %}
+
+
+
+  </div>
+{% endblock %}

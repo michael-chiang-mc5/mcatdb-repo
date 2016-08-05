@@ -1,0 +1,55 @@
+{% load MCBase_templatetags %}
+
+<div class="question-box">
+  <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+    {% for tag in question.tags.all %}
+      {{ tag }} &nbsp;
+    {% endfor %}
+    [<a href="{% url 'Test:editTags' question.pk %}">edit tags</a>]
+  </div>
+
+
+  <div class="{% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %} header-correct">
+    You are correct! {% if question.hasExplanation %}Click <a class="cursor-pointer toggle-explanation">here</a> to toggle explanation. {% endif %}
+  </div>
+  <div class="{% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %} header-incorrect">
+    Wrong! {% if question.hasExplanation %}Click <a class="cursor-pointer toggle-explanation">here</a> to toggle explanation.{% endif %}
+  </div>
+
+  <div>
+    {{ question|safe }}
+  </div>
+  <!-- answers -->
+  <hr />
+  {% for answer in question.answers.all|shuffle %}
+    <div class="answer-box question{{ question.pk }} {% if answer.correct %}answer-correct{% else %}answer-incorrect{% endif %}">
+      <input type="radio" name="question{{ question.pk }}" value="answer{{ answer.pk }}" class="hidden" />
+      {{ answer|safe }}
+      <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+        [<a href="{% url 'Test:editAnswerEditor' answer.pk %}">edit answer</a>] &nbsp;
+        [<a href="{% url 'Test:markAnswerCorrect' answer.pk %}">right answer</a>] &nbsp;
+        [<a href="{% url 'Test:markAnswerIncorrect' answer.pk %}">wrong answer</a>] &nbsp;
+        [<a href="{% url 'Test:deleteAnswer' answer.pk %}">delete answer</a>] &nbsp;
+      </div>
+
+      <div class="explanation {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+        {{ answer.explanation|safe }}
+        <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+          [<a href="{% url 'Test:editExplanationEditor' answer.pk %}">edit explanation</a>] &nbsp;
+        </div>
+      </div>
+
+    </div>
+
+  {% endfor %}
+  <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+    [<a href="{% url 'Test:editQuestionEditor' question.pk %}">edit question</a>] &nbsp;
+    [<a href="{% url 'Test:addAnswerEditor' question.pk %}">Add answer</a>] &nbsp;
+    [<a href="{% url 'Test:deleteQuestion' question.pk %}">Delete question</a>] &nbsp;
+    <hr />
+    <div>
+      {{ question.adminNotes|safe }}
+      [<a href="{% url 'Test:editQuestionAdminNotesEditor' question.pk %}">edit admin notes</a>] &nbsp;
+    </div>
+  </div>
+</div>

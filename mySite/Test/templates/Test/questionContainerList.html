@@ -1,0 +1,73 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'Test/css/questionContainerList.css' %}">
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: {extensions: ["mhchem.js"]}
+  });
+  </script>
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+{% endblock %}
+
+{% block title %}
+  question list
+{% endblock %}
+
+{% block body_block %}
+  {% if request.user.is_superuser %}
+    [<a href="{% url 'Test:addPassageEditor' %}">add passage-based questions</a>] &nbsp;
+    [<a href="{% url 'Test:addQuestionEditor' 0 %}">add single question</a>]
+    <hr />
+  {% endif %}
+
+  {% if questionContainers %}
+
+    {% for questionContainer in questionContainers %}
+
+      <!-- question -->
+      {% if questionContainer.content_object.type == "question" %}
+        <div class="box">
+          <div class="date">
+            {{ questionContainer.time|date:'F j, Y' }}
+          </div>
+
+          <div>
+            {{ questionContainer.content_object|safe }}
+          </div>
+
+          <div class="footer">
+            [<a href="{% url 'Test:editQuestionEditor' questionContainer.content_object.pk %}">edit</a>] &nbsp;
+            [<a href="{% url 'Test:questionContainerDetail' questionContainer.pk %}">detail</a>]
+          </div>
+        </div>
+
+
+      <!-- passage -->
+      {% elif questionContainer.content_object.type == "passage" %}
+        <div class="box">
+          <div class="date">
+            {{ questionContainer.time|date:'F j, Y' }}
+          </div>
+
+          <div class="max-lines">
+            {{ questionContainer.content_object|safe }}
+          </div>
+
+          <div class="footer">
+            [<a href="{% url 'Test:editPassageEditor' questionContainer.content_object.pk %}">edit</a>] &nbsp;
+            [<a href="{% url 'Test:questionContainerDetail' questionContainer.pk %}">detail</a>]
+          </div>
+        </div>
+
+      <!-- other -->
+      {% else %}
+        unknown
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    No questionContainers
+  {% endif %}
+
+{% endblock %}

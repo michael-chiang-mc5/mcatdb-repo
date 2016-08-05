@@ -1,0 +1,70 @@
+
+<!-- admin tools -->
+{% if request.user.is_superuser %}
+  <div>
+    [<a href="{% url 'Test:addPassageEditor' %}">Add passage</a>] &nbsp;
+    [<a class="cursor-pointer" id="show-edit-tools">Show editing tools</a>] &nbsp;
+    [<a class="cursor-pointer" id="hide-edit-tools">Hide editing tools</a>]
+  </div>
+{% endif %}
+
+<div>
+
+  <!-- This is the passage -->
+  <div class="left-box">
+    <div class="box">
+      <div class="date">
+          passage
+          <hr />
+      </div>
+      <div>
+        {{ passage|safe }}
+      </div>
+      <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+        [<a href="{% url 'Test:editPassageEditor' passage.pk %}">edit passage</a>] &nbsp;
+        [<a href="{% url 'Test:deletePassage' passage.pk %}">delete passage</a>] &nbsp;
+        <hr />
+        <div>
+          {{ passage.adminNotes|safe }}
+          [<a href="{% url 'Test:editPassageAdminNotesEditor' passage.pk %}">edit admin notes</a>] &nbsp;
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="box right-box">
+    <div class="date">
+        questions
+        <hr />
+    </div>
+
+    <div id="questions-box">
+      {% csrf_token %}
+
+      {% for question in questions %}
+        {% include "Test/template_question.html" %}
+      {% endfor %}
+
+      <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+        [<a href="{% url 'Test:addQuestionEditor' passage.pk %}">Add question</a>]
+      </div>
+
+      <!-- submit -->
+      <br />
+      <button class="btn btn-primary width-100" type="submit">submit</button>
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+
+
+
+
+</div>

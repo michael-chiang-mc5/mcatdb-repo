@@ -1,0 +1,43 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <!--
+  <link rel="stylesheet" href="{% static 'Test/css/admin.css' %}">
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/javascript" src="{% static 'Test/js/resize_img.js' %}"></script>
+  -->
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: {extensions: ["mhchem.js"]}
+  });
+  </script>
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <link rel="stylesheet" href="{% static 'Test/css/passageDetail.css' %}">
+  <script type="text/javascript" src="{% static 'Test/js/template_passage.js' %}"></script>
+
+
+{% endblock %}
+
+{% block title %}
+  standalone question detail
+{% endblock %}
+
+{% block body_block %}
+
+  {% if request.user.is_superuser %}
+  <div>
+    [<a href="{% url 'Test:addQuestionEditor' 0 %}">Add standalone question</a>] &nbsp;
+    [<a class="cursor-pointer" id="show-edit-tools">Show editing tools</a>] &nbsp;
+    [<a class="cursor-pointer" id="hide-edit-tools">Hide editing tools</a>] &nbsp;
+  </div>
+  {% endif %}
+
+  {% include "Test/template_question.html" %}
+
+  <!-- submit -->
+  <br />
+  <button class="btn btn-primary width-100" type="submit">submit</button>
+
+{% endblock %}
