@@ -21,10 +21,10 @@
             {% if forloop.counter0|divisibleby:3 %}<tr>{% endif %}
             <td class="text" align="left">
               <div class="include-tag inline">
-                <input onclick="gYes(8)" type="checkbox" id="gy8" name="GENRE[8]" value="1">
+                <input type="checkbox" id="gy8" name="GENRE[8]" value="1">
               </div>
               <div class="exclude-tag inline">
-                <input id="gn8" onclick="gNo(8)" type="checkbox" name="NOGENRE[8]" value="1">
+                <input id="gn8" type="checkbox" name="NOGENRE[8]" value="1">
               </div>
               {{ tag }}
             </td>

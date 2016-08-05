@@ -5,7 +5,7 @@
     {% for tag in question.tags.all %}
       {{ tag }} &nbsp;
     {% endfor %}
-    [<a href="{% url 'Test:editTags' question.pk %}">edit tags</a>]
+    [<a href="{% url 'Test:editTag' question.pk %}">edit tags</a>]
   </div>
 
 

@@ -5,8 +5,10 @@ urlpatterns = [
     url(r'^deleteAnswer/(?P<answer_pk>[0-9]+)/$', views.deleteAnswer, name='deleteAnswer'),
     url(r'^deleteQuestion/(?P<question_pk>[0-9]+)/$', views.deleteQuestion, name='deleteQuestion'),
     url(r'^deletePassage/(?P<passage_pk>[0-9]+)/$', views.deletePassage, name='deletePassage'),
-    url(r'^adminTags/$', views.adminTags, name='adminTags'),
-    url(r'^massEditTags/(?P<question_pk>[0-9]+)/$', views.massEditTags, name='massEditTags'),
+    url(r'^adminTagsIndividual/$', views.adminTagsIndividual, name='adminTagsIndividual'),
+    url(r'^adminTagsMass/$', views.adminTagsMass, name='adminTagsMass'),
+
+    url(r'^selectTags/(?P<questionContainer_pk>[0-9]+)/$', views.selectTags, name='selectTags'),
 
     url(r'^hideEditTools/$', views.hideEditTools, name='hideEditTools'),
     url(r'^showEditTools/$', views.showEditTools, name='showEditTools'),
@@ -20,6 +22,7 @@ urlpatterns = [
 
 
 
+    url(r'^selectAllTags/$', views.selectAllTags, name='selectAllTags'),
 
 
     url(r'^adminPanel/$', views.adminPanel, name='adminPanel'),
@@ -47,7 +50,7 @@ urlpatterns = [
     url(r'^markAnswerCorrect/(?P<answer_pk>[0-9]+)/$', views.markAnswerCorrect, name='markAnswerCorrect'),
     url(r'^markAnswerIncorrect/(?P<answer_pk>[0-9]+)/$', views.markAnswerIncorrect, name='markAnswerIncorrect'),
 
-    url(r'^editTags/(?P<questionContainer_pk>[0-9]+)/$', views.editTags, name='editTags'),
+    url(r'^editTag/(?P<questionContainer_pk>[0-9]+)/$', views.editTag, name='editTag'),
     url(r'^addTag/(?P<questionContainer_pk>[0-9]+)/$', views.addTag, name='addTag'),
     url(r'^removeTag/(?P<questionContainer_pk>[0-9]+)/$', views.removeTag, name='removeTag'),
 

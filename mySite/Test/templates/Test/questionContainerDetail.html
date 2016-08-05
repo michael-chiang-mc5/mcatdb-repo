@@ -31,7 +31,7 @@
     {% for tag in questionContainer.tags.all %}
       {{ tag }} &nbsp;
     {% endfor %}
-    [<a href="{% url 'Test:editTags' questionContainer.pk %}">edit tags</a>]
+    [<a href="{% url 'Test:editTag' questionContainer.pk %}">edit tags</a>]
   </div>
 
   {% if question %}
