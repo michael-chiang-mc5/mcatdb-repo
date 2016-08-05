@@ -28,10 +28,33 @@ class QuestionContainer(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id') # To get singleQuestion or passage object, questionContainer.content_object
     # random QuestionContainer object
     @staticmethod
-    def random():
-        num = QuestionContainer.objects.all().count()
+    def random(user):
+        # filter by include/exclude tags
+        tags_include = user.userprofile.tags_include.all()
+        tags_exclude = user.userprofile.tags_exclude.all()
+        if len(tags_include) > 0:
+            questionContainers = QuestionContainer.objects.all()
+            for tag_include in tags_include:
+                questionContainers = questionContainers.filter(tags__in=[tag_include])
+        else:
+            questionContainers = QuestionContainer.objects.all()
+        questionContainers = questionContainers.exclude(tags__in=tags_exclude)
+        # filter by question creation date
+        if user.userprofile.mindate is None:
+            mindate = datetime.datetime.min
+        else:
+            mindate = user.userprofile.mindate
+        if user.userprofile.maxdate is None:
+            maxdate = datetime.datetime.max
+        else:
+            maxdate = user.userprofile.maxdate
+        questionContainers = questionContainers.filter(time__range=[mindate, maxdate])
+
+
+
+        num = questionContainers.count()
         r = random.randint(0,num-1)
-        return QuestionContainer.objects.all()[r]
+        return questionContainers[r]
     def questionContainer_pk(self):
         return self.pk
     def type(self):

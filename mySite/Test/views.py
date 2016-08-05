@@ -22,5 +22,5 @@ def hideEditTools(request):
     userProfile.save()
     return HttpResponse("done")
 def randomQuestion(request):
-    questionContainer = QuestionContainer.random()
+    questionContainer = QuestionContainer.random(request.user)
     return recurseQuestionContainerDetail(request, questionContainer)

@@ -18,7 +18,9 @@
 {% block body_block %}
   {% if request.user.is_superuser %}
     [<a href="{% url 'Test:addPassageEditor' %}">add passage-based questions</a>] &nbsp;
-    [<a href="{% url 'Test:addQuestionEditor' 0 %}">add single question</a>]
+    [<a href="{% url 'Test:addQuestionEditor' 0 %}">add single question</a>] &nbsp;
+    [<a href="{% url 'Test:adminTagsMass' %}">tag admin (mass)</a>]
+
     <hr />
   {% endif %}
 
