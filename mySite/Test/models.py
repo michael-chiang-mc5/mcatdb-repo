@@ -3,6 +3,7 @@ import random
 import datetime
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User
 
 class Tag(models.Model):
     text = models.CharField(max_length=255, unique=True)
@@ -127,3 +128,19 @@ class Passage(models.Model):
         return "passage"
     def questionContainer_pk(self):
         return self.questionContainer.all()[0].pk
+
+class Comment(models.Model):
+    time = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    user = models.ForeignKey(User)
+    reply_at = models.ForeignKey('self', blank=True, null=True)
+    questionContainer = models.ForeignKey(QuestionContainer)
+    def __str__(self):
+        return self.text
+    def edit(self,text):
+        self.text = text
+    def is_reply(self):
+        if self.reply_at is None:
+            return False
+        else:
+            return True

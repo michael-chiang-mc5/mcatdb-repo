@@ -19,7 +19,7 @@
 {% block body_block %}
   {% if request.user.is_superuser %}
     <div>
-      [<a href="{% url 'Test:questionContainerList' %}">See full list</a>] &nbsp;    
+      [<a href="{% url 'Test:questionContainerList' %}">See full list</a>] &nbsp;
       [<a href="{% url 'Test:addPassageEditor' %}">Add passage</a>] &nbsp;
       [<a href="{% url 'Test:addQuestionEditor' 0 %}">Add single question</a>] &nbsp;
       [<a class="cursor-pointer" id="show-edit-tools">Show editing tools</a>] &nbsp;
@@ -44,5 +44,28 @@
   {% else %}
     unknown type
   {% endif %}
+
+  <!-- user comments -->
+  {% if comments|length == 0 %}
+    <h1>
+      No comments! Be the first to add yours!
+    </h1>
+  {% else %}
+    <h1>
+      {{ comments|length }} comments <sup>Add your own</sup>
+    </h1>
+  {% endif %}
+
+  <form id="form1" name="form1" method="post" action="{% url 'Test:addComment' questionContainer.pk %}">
+    {% csrf_token %}
+    <textarea name="form-text" rows="5">asdf</textarea>
+    <button class="btn btn-primary width-100" type="submit">submit</button>
+  </form>
+
+  {% for comment in comments %}
+    <div>
+      {{ comment }}
+    </div>
+  {% endfor %}
 
 {% endblock %}

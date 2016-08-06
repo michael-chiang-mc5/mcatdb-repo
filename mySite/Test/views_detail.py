@@ -21,9 +21,11 @@ def questionContainerDetail(request,questionContainer_pk):
     #    return HttpResponse("You are not a superuser")
     questionContainer = QuestionContainer.objects.get(pk=questionContainer_pk)
 
+    comments = questionContainer.comment_set.all()
+
     if questionContainer.type() == "question":
-        context = {'questionContainer':questionContainer,'question':questionContainer.content_object}
+        context = {'questionContainer':questionContainer,'question':questionContainer.content_object,'comments':comments}
         return render(request, 'Test/questionContainerDetail.html', context)
     elif questionContainer.type() == "passage":
-        context = {'questionContainer':questionContainer,'passage':questionContainer.content_object}
+        context = {'questionContainer':questionContainer,'passage':questionContainer.content_object,'comments':comments}
         return render(request, 'Test/questionContainerDetail.html', context)

@@ -55,4 +55,7 @@ urlpatterns = [
     url(r'^removeTag/(?P<questionContainer_pk>[0-9]+)/$', views.removeTag, name='removeTag'),
 
 
+    url(r'^addComment/(?P<questionContainer_pk>[0-9]+)/$', views.addComment, name='addComment'),
+
+
 ]

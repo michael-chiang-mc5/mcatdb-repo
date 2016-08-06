@@ -10,6 +10,7 @@ from .views_question import *
 from .views_detail import *
 from .views_answer import *
 from .views_tags import *
+from .views_comment import *
 
 def showEditTools(request):
     userProfile = request.user.userprofile
