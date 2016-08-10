@@ -19,12 +19,17 @@
 {% block body_block %}
   {% if request.user.is_superuser %}
     <div>
+      [<a href="{% url 'Test:adminPanel' %}">admin panel</a>] &nbsp;
       [<a href="{% url 'Test:questionContainerList' %}">See full list</a>] &nbsp;
       [<a href="{% url 'Test:addPassageEditor' %}">Add passage</a>] &nbsp;
       [<a href="{% url 'Test:addQuestionEditor' 0 %}">Add single question</a>] &nbsp;
       [<a class="cursor-pointer" id="show-edit-tools">Show editing tools</a>] &nbsp;
       [<a class="cursor-pointer" id="hide-edit-tools">Hide editing tools</a>] &nbsp;
     </div>
+  {% endif %}
+
+  {% if frontpage %}
+    <h1>Question of the Day</h1>
   {% endif %}
 
   <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">

@@ -29,7 +29,7 @@ class QuestionContainer(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id') # To get singleQuestion or passage object, questionContainer.content_object
     hidden = models.BooleanField(default=False)
-    
+
     # random QuestionContainer object
     @staticmethod
     def random(user):

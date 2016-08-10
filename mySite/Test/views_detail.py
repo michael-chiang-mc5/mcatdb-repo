@@ -22,12 +22,8 @@ def questionContainerList(request):
     return render(request, 'Test/questionContainerList.html', context)
 
 def questionContainerDetail(request,questionContainer_pk,showComments):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
     questionContainer = QuestionContainer.objects.get(pk=questionContainer_pk)
-
     comments = questionContainer.comment_set.order_by('time')
-
     if questionContainer.type() == "question":
         context = {'questionContainer':questionContainer,'question':questionContainer.content_object,'comments':comments,'showComments':showComments}
         return render(request, 'Test/questionContainerDetail.html', context)

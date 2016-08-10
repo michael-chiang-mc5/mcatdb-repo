@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from UserProfile.models import UserProfile
 from UserProfile.views import new_user
+from .models import *
+from django.core.urlresolvers import reverse
 
 # front page of mcatDB. Displays a random "Question of the Day"
 def index(request):
@@ -12,6 +14,37 @@ def index(request):
             userprofile = UserProfile(user=user,alias=user.username)
             userprofile.save()
 
-    request.user.is_superuser = True
-    context = {'passage':True}
-    return render(request, 'myContent/frontpage.html', context)
+    questionOfTheDay = QuestionOfTheDay.get_questionOfTheDay()
+    questionContainer = questionOfTheDay.questionContainer
+    comments = questionContainer.comment_set.order_by('time')
+    if questionContainer.type() == "question":
+        context = {'questionContainer':questionContainer,'question':questionContainer.content_object,'comments':comments,'showComments':'0','frontpage':True}
+        return render(request, 'Test/questionContainerDetail.html', context)
+    elif questionContainer.type() == "passage":
+        context = {'questionContainer':questionContainer,'passage':questionContainer.content_object,'comments':comments,'showComments':'0','frontpage':True}
+        return render(request, 'Test/questionContainerDetail.html', context)
+
+
+
+def admin_questionOfTheDay(request):
+    if not request.user.is_superuser:
+        return HttpResponse("You do not have permission")
+    questionsOfTheDay = QuestionOfTheDay.objects.order_by('order')
+    context = {'questionsOfTheDay':questionsOfTheDay}
+    return render(request, 'myContent/admin_questionOfTheDay.html', context)
+
+def adminOptions_questionOfTheDay(request):
+    addOrRemove =request.POST.get('addOrRemove')
+    questionContainer_pk = request.POST.get('questionContainer_pk')
+    order       = request.POST.get('order')
+    if order == '':
+        order = QuestionOfTheDay.max_order() + 1
+
+    if addOrRemove == 'add':
+        questionOfTheDay = QuestionOfTheDay(questionContainer=QuestionContainer.objects.get(pk=questionContainer_pk),order=order)
+        questionOfTheDay.save()
+    if addOrRemove == 'remove':
+        questionsOfTheDay = QuestionOfTheDay.objects.filter(questionContainer=questionContainer_pk)
+        questionsOfTheDay.delete()
+
+    return HttpResponseRedirect(reverse('myContent:admin_questionOfTheDay'))

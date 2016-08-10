@@ -1,0 +1,55 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'Test/css/admin.css' %}">
+{% endblock %}
+
+{% block title %}
+  admin panel
+{% endblock %}
+
+{% block body_block %}
+
+
+<h1>admin interface for question of the day</h1>
+
+
+<h2>Current list ({{ questionsOfTheDay|length }} elements)</h2>
+
+
+
+{% for questionOfTheDay in questionsOfTheDay %}
+  <li>
+    <b>
+      order={{ questionOfTheDay.order }}, pk={{ questionOfTheDay.questionContainer.pk }}</b>
+    </b>
+
+    <!-- display question -->
+    <div class="box max-lines">
+      {{ questionOfTheDay.questionContainer.content_object|safe }}
+    </div>
+
+  </li>
+{% endfor %}
+
+<!-- Interface to add/remove papers from weekly rotation -->
+<h2>Add/remove questions from daily rotation</h2>
+<form action="{% url 'myContent:adminOptions_questionOfTheDay' %}" method=POST>
+  {% csrf_token %}
+  <div class="radio">
+    <label><input type="radio" name="addOrRemove" value="add">Add to daily rotation</label>
+  </div>
+  <div class="radio">
+    <label><input type="radio" name="addOrRemove" value="remove">Remove from daily rotation</label>
+  </div>
+  <label>questionContainer primary key:</label>
+  <input type="text" name="questionContainer_pk">
+  <br>
+  <label>Position (leave blank if removing or appending to end):</label>
+  <input type="text" name="order">
+  <br>
+  <input type="submit">
+</form>
+
+{% endblock %}
