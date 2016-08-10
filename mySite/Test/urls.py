@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^questionContainerList/$', views.questionContainerList, name='questionContainerList'),
 
 
-    url(r'^questionContainerDetail/(?P<questionContainer_pk>[0-9]+)/$', views.questionContainerDetail, name='questionContainerDetail'),
+    url(r'^questionContainerDetail/(?P<questionContainer_pk>[0-9]+)/(?P<showComments>[0-1]+)/$', views.questionContainerDetail, name='questionContainerDetail'),
 
 
 
@@ -56,6 +56,8 @@ urlpatterns = [
 
 
     url(r'^addComment/(?P<questionContainer_pk>[0-9]+)/$', views.addComment, name='addComment'),
-
+    url(r'^editCommentEditor/(?P<comment_pk>[0-9]+)/$', views.editCommentEditor, name='editCommentEditor'),
+    url(r'^editComment/(?P<comment_pk>[0-9]+)/$', views.editComment, name='editComment'),
+    url(r'^deleteComment/(?P<comment_pk>[0-9]+)/$', views.deleteComment, name='deleteComment'),
 
 ]

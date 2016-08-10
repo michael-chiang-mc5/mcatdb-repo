@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from Test.models import Tag
+from Test.models import *
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
@@ -10,6 +10,8 @@ class UserProfile(models.Model):
     seeAdminTools = models.BooleanField(default=False)
     mindate = models.DateTimeField(blank=True,null=True) # when showing random questions, only include questions created between mintime, maxtime
     maxdate = models.DateTimeField(blank=True,null=True)
+
+    missedQuestions = models.ManyToManyField(QuestionContainer, blank=True, related_name="userProfiles")  # to access userprofiles from questionContainer instance, questionContainer.userProfiles.all()
 
     def __str__(self):
         return str(self.user)

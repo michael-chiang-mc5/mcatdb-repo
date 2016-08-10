@@ -24,6 +24,9 @@ $(document).ready(function() {
 $(document).ready(function() {
   $('button').click(function() {
 
+    // show comments
+    $('.user-comments').show()
+
     // iterate through questions
     $(this).parent().children('.question-box').each(function () {
       var question_box = $(this)
@@ -61,8 +64,6 @@ $(document).ready(function() {
         // no answer selected so incorrect
         question_box.children('.header-incorrect').show()
       }
-
-
 
     });
 
@@ -116,17 +117,34 @@ $(document).on('click', "#hide-edit-tools", function(){
 
 // Make passage/questions same height as the window
 window_height = $(window).height()
-function getHeight() {
-  offset_height = $('.left-box').offset().top
+function getMaxHeight(el) {
+  offset_height = $(el).offset().top
   return window_height - offset_height
 }
 $(document).ready(function() {
-  // set initial div height / width
-  $('.left-box').css({
-    'height': getHeight(),
-  });
-  $('.right-box').css({
-    'height': getHeight(),
-  });
 
+
+  try {
+    var left_box = $('.left-box')
+    var right_box = $('.right-box')
+    var left_height = Math.min(getMaxHeight(left_box), left_box.height()   );
+    var right_height = Math.min(getMaxHeight(right_box), right_box.height() + 10 );
+    var height = Math.max(left_height,right_height)
+    $('.left-box').css({
+      'height': height,
+    });
+    $('.right-box').css({
+      'height': height,
+    });
+  } catch(err) {
+
+  }
+
+});
+
+// Toggle comment form
+$(document).ready(function() {
+  $('.toggle-comment').click(function() {
+    $(this).parent().siblings(".comment-form").toggle()
+  });
 });

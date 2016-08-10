@@ -1,0 +1,33 @@
+
+<div class="comment-box">
+  <div class="comment-header">
+    {{ comment.user.userprofile.getName }},  {{ comment.time|date:'F j, Y' }}
+  </div>
+
+
+  {% if comment.reply_at.pk != None %}
+    <a>
+      @{{ comment.reply_at.user.userprofile.getName }}
+    </a>
+  {% endif %}
+
+  {{ comment|safe }}
+
+  <div class="comment-footer">
+    <a class="toggle-comment cursor-pointer">reply</a>
+    {% if comment.user.pk == request.user.pk %}
+    <a class="cursor-pointer" href="{% url 'Test:editCommentEditor' comment.pk %}">edit</a>
+    <a class="cursor-pointer" href="{% url 'Test:deleteComment' comment.pk %}">delete</a>
+    {% endif %}
+  </div>
+  <div class="comment-form display-none">
+    <form id="form1" name="form1" method="post" action="{% url 'Test:addComment' questionContainer.pk %}">
+      {% csrf_token %}
+      <input type="hidden" name="reply_at" value="{{ comment.pk }}"/>
+      <textarea name="form-text" rows="5"></textarea>
+      <button class="btn btn-primary width-100" type="submit">submit</button>
+    </form>
+  </div>
+
+
+</div>

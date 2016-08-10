@@ -34,38 +34,44 @@
     [<a href="{% url 'Test:editTag' questionContainer.pk %}">edit tags</a>]
   </div>
 
-  {% if question %}
-    {% include "Test/template_question.html" %}
-    <!-- submit button. Cannot be refactored into template_question because passage also uses template_question -->
-    <br />
-    <button class="btn btn-primary width-100" type="submit">submit</button>
-  {% elif passage %}
-    {% include "Test/template_passage.html" %}
-  {% else %}
-    unknown type
-  {% endif %}
+  <div>
+    {% if question %}
+      {% include "Test/template_question.html" %}
+      <!-- submit button. Cannot be refactored into template_question because passage also uses template_question -->
+      <br />
+      <button class="btn btn-primary width-100" type="submit">submit</button>
+    {% elif passage %}
+      {% include "Test/template_passage.html" %}
+    {% else %}
+      unknown type
+    {% endif %}
+  </div>
 
   <!-- user comments -->
-  {% if comments|length == 0 %}
-    <h1>
-      No comments! Be the first to add yours!
-    </h1>
-  {% else %}
-    <h1>
-      {{ comments|length }} comments <sup>Add your own</sup>
-    </h1>
-  {% endif %}
+  <hr />
+  <div class="user-comments {% if showComments == '0' %}display-none{% endif %}">
+    {% if comments|length == 0 %}
+      <h1>
+        No comments! <a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>
+      </h1>
+    {% else %}
+      <h1>
+        {{ comments|length }} comments <a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>
+      </h1>
+    {% endif %}
 
-  <form id="form1" name="form1" method="post" action="{% url 'Test:addComment' questionContainer.pk %}">
-    {% csrf_token %}
-    <textarea name="form-text" rows="5">asdf</textarea>
-    <button class="btn btn-primary width-100" type="submit">submit</button>
-  </form>
-
-  {% for comment in comments %}
-    <div>
-      {{ comment }}
+    <div class="comment-form display-none">
+      <form id="form1" name="form1" method="post" action="{% url 'Test:addComment' questionContainer.pk %}">
+        {% csrf_token %}
+        <input type="hidden" name="reply_at" value="None"/>
+        <textarea name="form-text" rows="5"></textarea>
+        <button class="btn btn-primary width-100" type="submit">submit</button>
+      </form>
     </div>
-  {% endfor %}
+
+    {% for comment in comments %}
+        {% include "Test/template_comment.html" %}
+    {% endfor %}
+  </div>
 
 {% endblock %}

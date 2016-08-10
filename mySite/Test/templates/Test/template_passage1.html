@@ -1,12 +1,4 @@
 
-<!-- admin tools -->
-{% if request.user.is_superuser %}
-  <div>
-    [<a href="{% url 'Test:addPassageEditor' %}">Add passage</a>] &nbsp;
-    [<a class="cursor-pointer" id="show-edit-tools">Show editing tools</a>] &nbsp;
-    [<a class="cursor-pointer" id="hide-edit-tools">Hide editing tools</a>]
-  </div>
-{% endif %}
 
 <div>
 
@@ -26,7 +18,6 @@
         <hr />
         <div>
           {{ passage.adminNotes|safe }}
-          [<a href="{% url 'Test:editPassageAdminNotesEditor' passage.pk %}">edit admin notes</a>] &nbsp;
         </div>
 
       </div>
@@ -42,7 +33,7 @@
     <div id="questions-box">
       {% csrf_token %}
 
-      {% for question in questions %}
+      {% for question in passage.questions.all %}
         {% include "Test/template_question.html" %}
       {% endfor %}
 

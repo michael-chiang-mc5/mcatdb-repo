@@ -1,11 +1,11 @@
 .left-box{
     width:50%;
-    float:left;
+    display: inline-block;;
     overflow: scroll;
 }
 .right-box{
     width:49%;
-    float:right;
+    display: inline-block;;
     overflow: scroll;
 }
 
@@ -154,4 +154,26 @@ textarea
   width:100%;
   margin:5px 0;
   padding:3px;
+}
+
+/* comments */
+.user-comments {
+  padding-left: 50px;
+  background-color: red;
+}
+
+.comment-box {
+  background-color: yellow;
+  margin-bottom: 10px;
+}
+
+.comment-header {
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 9px;
+}
+
+.comment-footer {
+  font-size: 10px;
 }

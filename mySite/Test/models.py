@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 
 class Tag(models.Model):
     text = models.CharField(max_length=255, unique=True)
+    priority = models.PositiveSmallIntegerField(default=1)
     def __str__(self):
         return self.text
     # saves a new class object if one does not already exist
@@ -27,6 +28,8 @@ class QuestionContainer(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id') # To get singleQuestion or passage object, questionContainer.content_object
+    hidden = models.BooleanField(default=False)
+    
     # random QuestionContainer object
     @staticmethod
     def random(user):
