@@ -23,5 +23,8 @@ def hideEditTools(request):
     userProfile.save()
     return HttpResponse("done")
 def randomQuestion(request):
-    questionContainer = QuestionContainer.random(request.user)
-    return recurseQuestionContainerDetail(request, questionContainer)
+    if request.user.is_authenticated():
+        questionContainer = QuestionContainer.random(request.user)
+        return recurseQuestionContainerDetail(request, questionContainer)
+    else:
+        return HttpResponse("You must log in (go back and look at top right hand corner)")

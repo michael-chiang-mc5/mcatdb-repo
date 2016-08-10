@@ -15,7 +15,12 @@ def index(request):
             userprofile.save()
 
     questionOfTheDay = QuestionOfTheDay.get_questionOfTheDay()
-    questionContainer = questionOfTheDay.questionContainer
+    try:
+        questionContainer = questionOfTheDay.questionContainer # if no questionsOfTheDay, questionOfTheDay = None
+    except:
+        return render(request,'myContent/frontpage.html')
+
+
     comments = questionContainer.comment_set.order_by('time')
     if questionContainer.type() == "question":
         context = {'questionContainer':questionContainer,'question':questionContainer.content_object,'comments':comments,'showComments':'0','frontpage':True}

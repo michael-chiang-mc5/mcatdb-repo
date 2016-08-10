@@ -2,10 +2,10 @@
 
 <div class="question-box">
 
-  <div class="{% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %} header-correct">
+  <div class="{% if request.user.userprofile.seeAdminTools == False or not request.user.is_authenticated %}display-none{% endif %} header-correct">
     You are correct! {% if question.hasExplanation %}Click <a class="cursor-pointer toggle-explanation">here</a> to toggle explanation. {% endif %}
   </div>
-  <div class="{% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %} header-incorrect">
+  <div class="{% if request.user.userprofile.seeAdminTools == False or not request.user.is_authenticated %}display-none{% endif %} header-incorrect">
     Wrong! {% if question.hasExplanation %}Click <a class="cursor-pointer toggle-explanation">here</a> to toggle explanation.{% endif %}
   </div>
 
@@ -18,16 +18,16 @@
     <div class="answer-box question{{ question.pk }} {% if answer.correct %}answer-correct{% else %}answer-incorrect{% endif %}">
       <input type="radio" name="question{{ question.pk }}" value="answer{{ answer.pk }}" class="hidden" />
       {{ answer|safe }}
-      <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+      <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False or not request.user.is_authenticated %}display-none{% endif %}">
         [<a href="{% url 'Test:editAnswerEditor' answer.pk %}">edit answer</a>] &nbsp;
         [<a href="{% url 'Test:markAnswerCorrect' answer.pk %}">right answer</a>] &nbsp;
         [<a href="{% url 'Test:markAnswerIncorrect' answer.pk %}">wrong answer</a>] &nbsp;
         [<a href="{% url 'Test:deleteAnswer' answer.pk %}">delete answer</a>] &nbsp;
       </div>
 
-      <div class="explanation {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+      <div class="explanation {% if request.user.userprofile.seeAdminTools == False or not request.user.is_authenticated %}display-none{% endif %}">
         {{ answer.explanation|safe }}
-        <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+        <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False or not request.user.is_authenticated %}display-none{% endif %}">
           [<a href="{% url 'Test:editExplanationEditor' answer.pk %}">edit explanation</a>] &nbsp;
         </div>
       </div>
@@ -35,7 +35,7 @@
     </div>
 
   {% endfor %}
-  <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+  <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False or not request.user.is_authenticated %}display-none{% endif %}">
     [<a href="{% url 'Test:editQuestionEditor' question.pk %}">edit question</a>] &nbsp;
     [<a href="{% url 'Test:addAnswerEditor' question.pk %}">Add answer</a>] &nbsp;
     [<a href="{% url 'Test:deleteQuestion' question.pk %}">Delete question</a>] &nbsp;

@@ -20,5 +20,7 @@ class QuestionOfTheDay(models.Model):
         today = datetime.datetime.today()
         days_elapsed = (today - base_time).days
         num_questionsOfTheDay = len(QuestionOfTheDay.objects.all())
+        if num_questionsOfTheDay == 0:
+            return None
         index = days_elapsed % num_questionsOfTheDay
         return QuestionOfTheDay.objects.order_by('order')[index]

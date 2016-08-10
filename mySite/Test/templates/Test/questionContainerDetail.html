@@ -32,7 +32,7 @@
     <h1>Question of the Day</h1>
   {% endif %}
 
-  <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+  <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False or not request.user.is_authenticated %}display-none{% endif %}">
     {% for tag in questionContainer.tags.all %}
       {{ tag }} &nbsp;
     {% endfor %}
@@ -57,11 +57,13 @@
   <div class="user-comments {% if showComments == '0' %}display-none{% endif %}">
     {% if comments|length == 0 %}
       <h1>
-        No comments! <a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>
+        No comments!
+        {% if request.user.is_authenticated %}<a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>{% endif %}
       </h1>
     {% else %}
       <h1>
-        {{ comments|length }} comments <a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>
+        {{ comments|length }} comments
+        {% if request.user.is_authenticated %}<a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>{% endif %}
       </h1>
     {% endif %}
 

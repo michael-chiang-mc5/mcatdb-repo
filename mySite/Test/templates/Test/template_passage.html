@@ -12,7 +12,7 @@
       <div>
         {{ passage|safe }}
       </div>
-      <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+      <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False or not request.user.is_authenticated %}display-none{% endif %}">
         [<a href="{% url 'Test:editPassageEditor' passage.pk %}">edit passage</a>] &nbsp;
         [<a href="{% url 'Test:deletePassage' passage.pk %}">delete passage</a>] &nbsp;
         <hr />
@@ -37,7 +37,7 @@
         {% include "Test/template_question.html" %}
       {% endfor %}
 
-      <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False %}display-none{% endif %}">
+      <div class="admin-tools {% if request.user.userprofile.seeAdminTools == False or not request.user.is_authenticated %}display-none{% endif %}">
         [<a href="{% url 'Test:addQuestionEditor' passage.pk %}">Add question</a>]
       </div>
 
