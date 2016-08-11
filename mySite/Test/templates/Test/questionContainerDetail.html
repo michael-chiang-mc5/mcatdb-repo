@@ -60,12 +60,20 @@
     {% if comments|length == 0 %}
       <h2>
         No comments!
-        {% if request.user.is_authenticated %}<a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>{% endif %}
+        {% if request.user.is_authenticated %}
+          <a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>
+        {% else %}
+          <a class="toggle-login-modal cursor-pointer" data-toggle="modal" data-target="#social-auth-modal"><sup>Log in to add your own!</sup></a>
+        {% endif %}
       </h2>
     {% else %}
       <h2>
         {{ comments|length }} comments
-        {% if request.user.is_authenticated %}<a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>{% endif %}
+        {% if request.user.is_authenticated %}
+          <a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>
+        {% else %}
+          <a class="toggle-login-modal cursor-pointer" data-toggle="modal" data-target="#social-auth-modal"><sup>Log in to add your own!</sup></a>
+        {% endif %}
       </h2>
     {% endif %}
 
