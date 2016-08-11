@@ -159,12 +159,17 @@ textarea
 /* comments */
 .user-comments {
   padding-left: 50px;
-  background-color: red;
 }
 
 .comment-box {
-  background-color: yellow;
+  border-radius: 5px;
   margin-bottom: 10px;
+  background-color: #F5F5F5;
+  padding-left: 0.25in;
+  padding-right: 0.25in;
+  padding-top: 0.05in;
+  padding-bottom: 0.05in;
+
 }
 
 .comment-header {

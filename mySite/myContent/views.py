@@ -5,8 +5,11 @@ from UserProfile.views import new_user
 from .models import *
 from django.core.urlresolvers import reverse
 
-# front page of mcatDB. Displays a random "Question of the Day"
 def index(request):
+    return HttpResponseRedirect(reverse('myContent:questionOfTheDay'))
+
+# front page of mcatDB. Displays a random "Question of the Day"
+def questionOfTheDay(request):
     if request.user.is_authenticated():
         userProfileExists = UserProfile.exists(request.user)
         if not userProfileExists:
@@ -29,7 +32,8 @@ def index(request):
         context = {'questionContainer':questionContainer,'passage':questionContainer.content_object,'comments':comments,'showComments':'0','frontpage':True}
         return render(request, 'Test/questionContainerDetail.html', context)
 
-
+def about(request):
+    return render(request,'myContent/about.html')
 
 def admin_questionOfTheDay(request):
     if not request.user.is_superuser:

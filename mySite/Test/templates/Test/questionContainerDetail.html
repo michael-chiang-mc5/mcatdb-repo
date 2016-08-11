@@ -8,6 +8,8 @@
     });
   </script>
   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script src="{% static 'MCBase/js/jquery-ui-1.11.4.custom/jquery-ui.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'MCBase/js/jquery-ui-1.11.4.custom/jquery-ui.css' %}">
   <link rel="stylesheet" href="{% static 'Test/css/passageDetail.css' %}">
   <script type="text/javascript" src="{% static 'Test/js/template_passage.js' %}"></script>
 {% endblock %}
@@ -56,15 +58,15 @@
   <hr />
   <div class="user-comments {% if showComments == '0' %}display-none{% endif %}">
     {% if comments|length == 0 %}
-      <h1>
+      <h2>
         No comments!
         {% if request.user.is_authenticated %}<a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>{% endif %}
-      </h1>
+      </h2>
     {% else %}
-      <h1>
+      <h2>
         {{ comments|length }} comments
         {% if request.user.is_authenticated %}<a class="toggle-comment cursor-pointer"><sup>Add your own</sup></a>{% endif %}
-      </h1>
+      </h2>
     {% endif %}
 
     <div class="comment-form display-none">

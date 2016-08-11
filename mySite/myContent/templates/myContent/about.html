@@ -1,0 +1,21 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <link rel="stylesheet" href="{% static 'myContent/css/frontpage.css' %}">
+{% endblock %}
+
+{% block title %}
+  mcatDB
+{% endblock %}
+
+{% block body_block %}
+  <div class="content">
+
+    <div class="box">
+      Questions? Comments? Email michael dot chiang dot mc5 at gmail dot com. <br />
+      Or click <a href="http://www.michael-chiang.com">www.michael-chiang.com</a> to learn more about my other projects.
+    </div>
+
+  </div>
+{% endblock %}

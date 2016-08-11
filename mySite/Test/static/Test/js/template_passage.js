@@ -148,3 +148,22 @@ $(document).ready(function() {
     $(this).parent().siblings(".comment-form").toggle()
   });
 });
+
+
+$(document).ready(function() {
+  $('.highlight-comment').click(function() {
+    var pk = $(this).attr('id')
+    var sel = $('#comment-'+pk)
+
+
+    $('.comment-box').css({
+      'background-color': '#F5F5F5',
+    })
+
+    sel.css({
+      'background-color': 'yellow',
+    });
+    sel.effect("shake", {}, 700);
+
+  });
+});
