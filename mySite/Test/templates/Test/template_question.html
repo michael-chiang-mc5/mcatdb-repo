@@ -39,6 +39,10 @@
     [<a href="{% url 'Test:editQuestionEditor' question.pk %}">edit question</a>] &nbsp;
     [<a href="{% url 'Test:addAnswerEditor' question.pk %}">Add answer</a>] &nbsp;
     [<a href="{% url 'Test:deleteQuestion' question.pk %}">Delete question</a>] &nbsp;
+    {% if question.is_passage %}
+      [<a href="{% url 'Test:copyQuestionInPassage' question.pk %}">Copy question</a>] &nbsp;
+    {% endif %}
+
     <hr />
     <div>
       {{ question.adminNotes|safe }}

@@ -53,9 +53,6 @@ class QuestionContainer(models.Model):
         else:
             maxdate = user.userprofile.maxdate
         questionContainers = questionContainers.filter(time__range=[mindate, maxdate])
-
-
-
         num = questionContainers.count()
         r = random.randint(0,num-1)
         return questionContainers[r]
@@ -63,6 +60,15 @@ class QuestionContainer(models.Model):
         return self.pk
     def type(self):
         return self.content_object.type()
+    def deepcopy(self):
+        new_obj = self.content_object.deepcopy()
+        new_qC = QuestionContainer(hidden=self.hidden,content_object=new_obj)
+        new_qC.save() # saving is necessary to initialize ManyToManyField
+        for tag in self.tags.all():
+            new_qC.tags.add(tag)
+        new_qC.save()
+        return new_qC
+
 
 class Answer(models.Model):
     time = models.DateTimeField(auto_now_add=True)
@@ -79,6 +85,11 @@ class Answer(models.Model):
     def questionContainer_pk(self):
         question = self.questions.all()[0]
         return question.questionContainer_pk()
+    def deepcopy(self):
+        new_answer = Answer(text=self.text,explanation=self.explanation,correct=self.correct,adminNotes=self.adminNotes)
+        new_answer.save()
+        return new_answer
+
 
 # Question can be part of a passage, or it can be a single question
 class Question(models.Model):
@@ -113,6 +124,18 @@ class Question(models.Model):
         else: # single question
             questionContainer = self.questionContainer.all()[0]
             return questionContainer.pk
+    def deepcopy(self):
+        new_question = Question(text=self.text,adminNotes=self.adminNotes)
+        new_question.save() # saving is necessary to initialize ManyToManyField
+        for answer in self.answers.all():
+            new_answer = answer.deepcopy()
+            new_question.answers.add(new_answer)
+        new_question.save()
+        return new_question
+    def is_passage(self):
+        if len(self.passages.all()) > 0:
+            return True
+        return False
 
 class Passage(models.Model):
     time = models.DateTimeField(auto_now_add=True)
@@ -131,6 +154,14 @@ class Passage(models.Model):
         return "passage"
     def questionContainer_pk(self):
         return self.questionContainer.all()[0].pk
+    def deepcopy(self):
+        new_passage = Passage(text=self.text,adminNotes=self.adminNotes)
+        new_passage.save() # saving is necessary to initialize ManyToManyField
+        for question in self.questions.all():
+            new_question = question.deepcopy()
+            new_passage.questions.add(new_question)
+        new_passage.save()
+        return new_passage
 
 class Comment(models.Model):
     time = models.DateTimeField(auto_now_add=True)

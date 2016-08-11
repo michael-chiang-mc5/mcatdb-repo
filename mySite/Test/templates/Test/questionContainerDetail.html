@@ -25,6 +25,7 @@
       [<a href="{% url 'Test:questionContainerList' %}">See full list</a>] &nbsp;
       [<a href="{% url 'Test:addPassageEditor' %}">Add passage</a>] &nbsp;
       [<a href="{% url 'Test:addQuestionEditor' 0 %}">Add single question</a>] &nbsp;
+      [<a href="{% url 'Test:copyQuestionContainer' questionContainer.pk %}">Copy {{ questionContainer.type }}</a>] &nbsp;
       [<a class="cursor-pointer" id="show-edit-tools">Show editing tools</a>] &nbsp;
       [<a class="cursor-pointer" id="hide-edit-tools">Hide editing tools</a>] &nbsp;
     </div>

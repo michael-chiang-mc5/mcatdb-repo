@@ -60,4 +60,7 @@ urlpatterns = [
     url(r'^editComment/(?P<comment_pk>[0-9]+)/$', views.editComment, name='editComment'),
     url(r'^deleteComment/(?P<comment_pk>[0-9]+)/$', views.deleteComment, name='deleteComment'),
 
+    url(r'^copyQuestionContainer/(?P<questionContainer_pk>[0-9]+)/$', views.copyQuestionContainer, name='copyQuestionContainer'),
+    url(r'^copyQuestionInPassage/(?P<question_pk>[0-9]+)/$', views.copyQuestionInPassage, name='copyQuestionInPassage'),
+
 ]
