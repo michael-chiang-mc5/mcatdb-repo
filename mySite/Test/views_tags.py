@@ -10,7 +10,7 @@ def addTag(request,questionContainer_pk):
     #if not request.user.is_superuser:
     #    return HttpResponse("You are not a superuser")
     text = request.POST.get("tag-text")
-    Tag.newTag(text)
+    Tag.getTag(text)
     tag = Tag.objects.get(text=text)
     questionContainer = QuestionContainer.objects.get(pk=questionContainer_pk)
     questionContainer.tags.add(tag)
@@ -36,52 +36,16 @@ def editTag(request,questionContainer_pk):
     context = {'questionContainer':questionContainer, 'tags':tags, 'allTags':allTags}
     return render(request, 'Test/editTag.html', context)
 
-
-def adminTagsIndividual(request):
-    #if not request.user.is_superuser: # TODO: add back in
-    #    return HttpResponse("You are not a superuser")
-    questionContainers = QuestionContainer.objects.all()
-    for questionContainer in questionContainers:
-        tags = Tag.objects.extra( select={'lower_text': 'lower(text)'}).order_by("lower_text").all() # tags sorted in alphabetical order
-        questionContainer.taglist = tags
-        for i,tag in enumerate(questionContainer.taglist):
-            questionContainer.taglist[i].checked = tag in questionContainer.tags.all()
-    context = {'questionContainers':questionContainers}
-    return render(request, 'Test/adminTagsIndividual.html', context)
-def adminTagsMass(request): # TODO: this is exactly the same as adminTagsIndividual outside of html
-    #if not request.user.is_superuser: # TODO: add back in
-    #    return HttpResponse("You are not a superuser")
-    questionContainers = QuestionContainer.objects.all()
-    for questionContainer in questionContainers:
-        tags = Tag.objects.extra( select={'lower_text': 'lower(text)'}).order_by("lower_text").all() # tags sorted in alphabetical order
-        questionContainer.taglist = tags
-        for i,tag in enumerate(questionContainer.taglist):
-            questionContainer.taglist[i].checked = tag in questionContainer.tags.all()
-    context = {'questionContainers':questionContainers}
-    return render(request, 'Test/adminTagsMass.html', context)
-
-# Edits all tags for a single questionContainer
-def selectTags(request,questionContainer_pk):
-    tags = Tag.objects.all()
-    for tag in tags:
-        # tag is checked
-        if request.POST.get(tag.text,False):
-            questionContainer = QuestionContainer.objects.get(pk=questionContainer_pk)
-            questionContainer.tags.add(tag)
-        else:
-            questionContainer = QuestionContainer.objects.get(pk=questionContainer_pk)
-            questionContainer.tags.remove(tag)
-    return HttpResponse("done")
-
 # Edit all tags for all questionContainer
 def selectAllTags(request):
-    # clear all tags
-    for questionContainer in QuestionContainer.objects.all():
-        questionContainer.tags.clear()
+    questionContainers = QuestionContainer.objects.all()
     tags = Tag.objects.all()
-    for tag in tags:
-        vals = request.POST.getlist(tag.text)
-        for val in vals:
-            questionContainer = QuestionContainer.objects.get(pk=val)
+
+    for questionContainer in questionContainers:
+        checked_tags = request.POST.getlist('questionContainer-'+str(questionContainer.pk))
+        questionContainer.tags.clear()
+        for tag_text in checked_tags:
+            tag = Tag.getTag(tag_text)
             questionContainer.tags.add(tag)
-    return HttpResponseRedirect(reverse('Test:adminTagsMass'))
+
+    return HttpResponseRedirect(reverse('Test:questionContainerList'))

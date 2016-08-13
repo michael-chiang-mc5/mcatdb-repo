@@ -84,3 +84,23 @@ figcaption {
   overflow: scroll;
   max-height: 100px;
 }
+
+.include-tag {
+  background-color: #AAFFAA;
+}
+
+.exclude-tag {
+  background-color: #FFAAAA;
+}
+
+input[type=checkbox], input[type=radio] {
+    margin: 4px 4px 4px 4px !important;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.width-100 {
+  width: 100%;
+}

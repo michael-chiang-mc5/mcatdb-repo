@@ -1,4 +1,4 @@
-{% extends "MCBase/base.html" %}
+{% extends "MCBase/base-extended.html" %}
 {% load staticfiles %}
 
 {% block javascript %}
@@ -9,6 +9,8 @@
   });
   </script>
   <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/javascript" src="{% static 'Test/js/adminTags.js' %}"></script>
+
 {% endblock %}
 
 {% block title %}
@@ -19,55 +21,67 @@
   {% if request.user.is_superuser %}
     [<a href="{% url 'Test:addPassageEditor' %}">add passage-based questions</a>] &nbsp;
     [<a href="{% url 'Test:addQuestionEditor' 0 %}">add single question</a>] &nbsp;
-    [<a href="{% url 'Test:adminTagsMass' %}">tag admin (mass)</a>]
-
     <hr />
   {% endif %}
 
   {% if questionContainers %}
 
-    {% for questionContainer in questionContainers %}
+    <form class="note-form" role="form" action="{% url 'Test:selectAllTags' %}" method=POST>
+      {% csrf_token %}
 
-      <!-- question -->
-      {% if questionContainer.content_object.type == "question" %}
-        <div class="box">
-          <div class="date">
-            {{ questionContainer.time|date:'F j, Y' }}, pk={{questionContainer.pk}}
+      {% for questionContainer in questionContainers %}
+
+        <div class="row box">
+          <div {% if tagAdmin %} class="col-md-6" {% endif %}>  <!-- shorten if tag admin -->
+            <div class="date">
+              {{ questionContainer.time|date:'F j, Y' }}, pk={{questionContainer.pk}}
+            </div>
+            <!-- question -->
+            {% if questionContainer.content_object.type == "question" %}
+              <div>
+                {{ questionContainer.content_object|safe }}
+              </div>
+            {% elif questionContainer.content_object.type == "passage" %} <!-- if passage, truncate -->
+              <div class="max-lines">
+                {{ questionContainer.content_object|safe }}
+              </div>
+            {% endif %}
+            <div class="footer">
+              [<a href="{% url 'Test:editQuestionEditor' questionContainer.content_object.pk %}">edit</a>] &nbsp;
+              [<a href="{% url 'Test:questionContainerDetail' questionContainer.pk 0 %}">detail</a>]
+            </div>
           </div>
 
-          <div>
-            {{ questionContainer.content_object|safe }}
-          </div>
+          <!-- checkboxes for tags -->
+          {% if tagAdmin %}
+            <div class="col-md-6">
+                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                  <tbody>
+                    {% for tag in questionContainer.taglist %}
+                      {% if forloop.counter0|divisibleby:4 %}<tr>{% endif %}
+                      <td class="text" align="left">
+                        <div class="inline">
+                          <!--
+                          <input type="checkbox" name="{{ tag }}" value="{{ questionContainer.pk }}" {% if tag.checked %} checked {% endif %}>
+                        -->
+                          <input type="checkbox" name="questionContainer-{{ questionContainer.pk }}" value="{{ tag }}" {% if tag.checked %} checked {% endif %}>
 
-          <div class="footer">
-            [<a href="{% url 'Test:editQuestionEditor' questionContainer.content_object.pk %}">edit</a>] &nbsp;
-            [<a href="{% url 'Test:questionContainerDetail' questionContainer.pk 0 %}">detail</a>]
-          </div>
+                        </div>
+                        {{ tag }}
+                      </td>
+                      {% if forloop.counter|divisibleby:4 %}</tr>{% endif %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+          {% endif %}
+
         </div>
 
+      {% endfor %} <!-- for loop for question container -->
+    <button class="btn-sm btn-primary width-100" type="submit">change all</button>
 
-      <!-- passage -->
-      {% elif questionContainer.content_object.type == "passage" %}
-        <div class="box">
-          <div class="date">
-            {{ questionContainer.time|date:'F j, Y' }}, pk={{questionContainer.pk}}
-          </div>
-
-          <div class="max-lines">
-            {{ questionContainer.content_object|safe }}
-          </div>
-
-          <div class="footer">
-            [<a href="{% url 'Test:editPassageEditor' questionContainer.content_object.pk %}">edit</a>] &nbsp;
-            [<a href="{% url 'Test:questionContainerDetail' questionContainer.pk 0 %}">detail</a>]
-          </div>
-        </div>
-
-      <!-- other -->
-      {% else %}
-        unknown
-      {% endif %}
-    {% endfor %}
+  </form>
   {% else %}
     No questionContainers
   {% endif %}

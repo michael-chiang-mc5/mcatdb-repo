@@ -11,12 +11,15 @@ class Tag(models.Model):
     def __str__(self):
         return self.text
     # saves a new class object if one does not already exist
-    @classmethod
-    def newTag(self,text):
+    @staticmethod
+    def getTag(text):
         tags = Tag.objects.filter(text=text)
         if len(tags)==0:
             tag = Tag(text=text)
             tag.save()
+            return tag
+        else:
+            return tags[0]
 
 # all SingleQuestion and Passage objects link to a QuestionContainer object
 # need to set content_object

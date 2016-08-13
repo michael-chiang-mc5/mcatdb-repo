@@ -5,10 +5,7 @@ urlpatterns = [
     url(r'^deleteAnswer/(?P<answer_pk>[0-9]+)/$', views.deleteAnswer, name='deleteAnswer'),
     url(r'^deleteQuestion/(?P<question_pk>[0-9]+)/$', views.deleteQuestion, name='deleteQuestion'),
     url(r'^deletePassage/(?P<passage_pk>[0-9]+)/$', views.deletePassage, name='deletePassage'),
-    url(r'^adminTagsIndividual/$', views.adminTagsIndividual, name='adminTagsIndividual'),
-    url(r'^adminTagsMass/$', views.adminTagsMass, name='adminTagsMass'),
 
-    url(r'^selectTags/(?P<questionContainer_pk>[0-9]+)/$', views.selectTags, name='selectTags'),
 
     url(r'^hideEditTools/$', views.hideEditTools, name='hideEditTools'),
     url(r'^showEditTools/$', views.showEditTools, name='showEditTools'),

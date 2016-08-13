@@ -13,13 +13,18 @@ def recurseQuestionContainerDetail_withComments(request, obj):
     questionContainer_pk = obj.questionContainer_pk()
     return HttpResponseRedirect(reverse('Test:questionContainerDetail',args=[questionContainer_pk,1]))
 
-# display all questionContainers
 def questionContainerList(request):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     questionContainers = QuestionContainer.objects.all()
-    context = {'questionContainers':questionContainers}
+    for questionContainer in questionContainers:
+        tags = Tag.objects.extra( select={'lower_text': 'lower(text)'}).order_by("lower_text").all() # tags sorted in alphabetical order
+        questionContainer.taglist = tags
+        for i,tag in enumerate(questionContainer.taglist):
+            questionContainer.taglist[i].checked = tag in questionContainer.tags.all()
+    context = {'questionContainers':questionContainers,'tagAdmin':True}
     return render(request, 'Test/questionContainerList.html', context)
+
 
 def questionContainerDetail(request,questionContainer_pk,showComments):
     questionContainer = QuestionContainer.objects.get(pk=questionContainer_pk)
