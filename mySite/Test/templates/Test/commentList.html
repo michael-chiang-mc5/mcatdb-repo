@@ -1,0 +1,39 @@
+{% extends "MCBase/base.html" %}
+{% load staticfiles %}
+
+{% block javascript %}
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      TeX: {extensions: ["mhchem.js"]}
+    });
+  </script>
+  <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script src="{% static 'MCBase/js/jquery-ui-1.11.4.custom/jquery-ui.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'MCBase/js/jquery-ui-1.11.4.custom/jquery-ui.css' %}">
+  <link rel="stylesheet" href="{% static 'Test/css/passageDetail.css' %}">
+  <script type="text/javascript" src="{% static 'Test/js/template_passage.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+  comment list
+{% endblock %}
+
+{% block body_block %}
+  {% if request.user.is_superuser %}
+    <div>
+      [<a href="{% url 'Test:adminPanel' %}">admin panel</a>] &nbsp;
+      [<a href="{% url 'Test:questionContainerList' %}">See full list</a>] &nbsp;
+    </div>
+  {% endif %}
+
+  <div>
+    {% if comments %}
+      {% for comment in comments %}
+          {% include "Test/template_comment.html" %}
+      {% endfor %}
+    {% else %}
+      No comments
+    {% endif %}
+  </div>
+
+{% endblock %}
