@@ -48,11 +48,11 @@ class QuestionContainer(models.Model):
         questionContainers = questionContainers.exclude(tags__in=tags_exclude)
         # filter by question creation date
         if user.userprofile.mindate is None:
-            mindate = datetime.datetime.min
+            mindate = datetime.datetime(2000,12,31)
         else:
             mindate = user.userprofile.mindate
         if user.userprofile.maxdate is None:
-            maxdate = datetime.datetime.max
+            maxdate = datetime.datetime(2500,12,31)
         else:
             maxdate = user.userprofile.maxdate
         questionContainers = questionContainers.filter(time__range=[mindate, maxdate])

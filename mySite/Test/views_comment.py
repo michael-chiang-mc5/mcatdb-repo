@@ -5,6 +5,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from MCEditor.views import editor
 from .views_detail import *
 
+def commentList(request,include_myself):
+    comments = Comment.objects.order_by("-time")
+    if include_myself == '0':
+        comments = comments.exclude(user=request.user)
+    context = {'comments':comments}
+    return render(request, 'Test/commentList.html', context)
+
 def addComment(request,questionContainer_pk):
     form_text = request.POST.get("form-text")
     reply_at = request.POST.get("reply_at")

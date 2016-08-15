@@ -18,13 +18,43 @@
 {% endblock %}
 
 {% block body_block %}
-  {% if request.user.is_superuser %}
-    [<a href="{% url 'Test:addPassageEditor' %}">add passage-based questions</a>] &nbsp;
-    [<a href="{% url 'Test:addQuestionEditor' 0 %}">add single question</a>] &nbsp;
-    <hr />
-  {% endif %}
+  <a class="filter-tags cursor-pointer">Click to filter by tags</a>
+
+  <div class="box tag-choices display-none">
+    <form class="note-form" role="form" action="{% url 'Test:questionContainerList' %}" method=POST>
+      {% csrf_token %}
+      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tbody>
+          {% for tag in tags_display %}
+            {% if forloop.counter0|divisibleby:7 %}<tr>{% endif %}
+            <td class="text" align="left">
+              <div class="include-tag inline">
+                <input type="checkbox" name="{{ tag }}" value="include" {% if tag.include %} checked {% endif %}>
+              </div>
+              <div class="exclude-tag inline">
+                <input type="checkbox" name="{{ tag }}" value="exclude" {% if tag.exclude %} checked {% endif %}>
+              </div>
+              {{ tag }}
+            </td>
+            {% if forloop.counter|divisibleby:7 %}</tr>{% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+      <button class="btn btn-primary" type="submit">submit</button>
+    </form>
+  </div>
+
+
+
+  <br /> <br />
+  [<a href="{% url 'Test:addPassageEditor' %}">add passage-based questions</a>] &nbsp;
+  [<a href="{% url 'Test:addQuestionEditor' 0 %}">add single question</a>] &nbsp;
+  <br />
+  <hr />
 
   {% if questionContainers %}
+    <br />
+    <h1>{{ questionContainers|length }} total questionContainers</h1>
 
     <form class="note-form" role="form" action="{% url 'Test:selectAllTags' %}" method=POST>
       {% csrf_token %}
@@ -61,11 +91,7 @@
                       {% if forloop.counter0|divisibleby:4 %}<tr>{% endif %}
                       <td class="text" align="left">
                         <div class="inline">
-                          <!--
-                          <input type="checkbox" name="{{ tag }}" value="{{ questionContainer.pk }}" {% if tag.checked %} checked {% endif %}>
-                        -->
                           <input type="checkbox" name="questionContainer-{{ questionContainer.pk }}" value="{{ tag }}" {% if tag.checked %} checked {% endif %}>
-
                         </div>
                         {{ tag }}
                       </td>
@@ -75,7 +101,6 @@
                 </table>
             </div>
           {% endif %}
-
         </div>
 
       {% endfor %} <!-- for loop for question container -->
@@ -83,7 +108,7 @@
 
   </form>
   {% else %}
-    No questionContainers
+    No questionContainers. Try filtering?
   {% endif %}
 
 {% endblock %}

@@ -5,6 +5,7 @@ urlpatterns = [
     url(r'^deleteAnswer/(?P<answer_pk>[0-9]+)/$', views.deleteAnswer, name='deleteAnswer'),
     url(r'^deleteQuestion/(?P<question_pk>[0-9]+)/$', views.deleteQuestion, name='deleteQuestion'),
     url(r'^deletePassage/(?P<passage_pk>[0-9]+)/$', views.deletePassage, name='deletePassage'),
+    url(r'^commentList/(?P<include_myself>[0-1]+)/$', views.commentList, name='commentList'),
 
 
     url(r'^hideEditTools/$', views.hideEditTools, name='hideEditTools'),
