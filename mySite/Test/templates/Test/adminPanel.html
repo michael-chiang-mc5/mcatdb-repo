@@ -16,16 +16,14 @@
     <br />
     <a href="{% url 'Test:addQuestionEditor' 0 %}">add single question</a>
     <br />
-
     <hr />
-
     <a href="{% url 'Test:questionContainerList' %}">view list</a>
-    <br />
     <hr />
-    <br />
-
     <a href="{% url 'myContent:admin_questionOfTheDay' %}">question of the day</a>
-
+    <br />
+    <a href="{% url 'Test:commentList' 1 %}">comment list (full)</a>
+    <br />
+    <a href="{% url 'Test:commentList' 0 %}">comment list (only from other people)</a>
 
   </div>
 {% endblock %}

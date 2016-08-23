@@ -21,8 +21,7 @@ def questionOfTheDay(request):
     try:
         questionContainer = questionOfTheDay.questionContainer # if no questionsOfTheDay, questionOfTheDay = None
     except:
-        return render(request,'myContent/frontpage.html')
-
+        return render(request,'Test/questionContainerList.html')
 
     comments = questionContainer.comment_set.order_by('time')
     if questionContainer.type() == "question":

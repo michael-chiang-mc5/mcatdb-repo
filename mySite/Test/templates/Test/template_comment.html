@@ -23,12 +23,14 @@
     {% endif %}
   </div>
   <div class="comment-form display-none">
-    <form id="form1" name="form1" method="post" action="{% url 'Test:addComment' questionContainer.pk %}">
-      {% csrf_token %}
-      <input type="hidden" name="reply_at" value="{{ comment.pk }}"/>
-      <textarea name="form-text" rows="5"></textarea>
-      <button class="btn btn-primary width-100" type="submit">submit</button>
-    </form>
+    {% if questionContainer %}
+      <form id="form1" name="form1" method="post" action="{% url 'Test:addComment' questionContainer.pk %}">
+        {% csrf_token %}
+        <input type="hidden" name="reply_at" value="{{ comment.pk }}"/>
+        <textarea name="form-text" rows="5"></textarea>
+        <button class="btn btn-primary width-100" type="submit">submit</button>
+      </form>
+    {% endif %}
   </div>
 
 
