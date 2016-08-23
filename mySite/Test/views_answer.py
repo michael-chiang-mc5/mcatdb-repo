@@ -8,8 +8,8 @@ from .views_detail import *
 
 # Methods to add and edit answers
 def addAnswerEditor(request,question_pk):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:addAnswer')
     form_data = serialize_json({'question_pk':question_pk,})
     header = "Add an answer"
@@ -17,8 +17,8 @@ def addAnswerEditor(request,question_pk):
     html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
     return html
 def addAnswer(request):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     # save answer
     form_text = request.POST.get("form-text")
     answer = Answer(text=form_text)
@@ -33,8 +33,8 @@ def addAnswer(request):
     return recurseQuestionContainerDetail(request,answer)
 
 def editAnswerEditor(request,answer_pk):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:editAnswer',args=[answer_pk])
     form_data = {}
     header = "Edit an answer"
@@ -78,8 +78,8 @@ def editExplanation(request,answer_pk):
     return recurseQuestionContainerDetail(request,answer)
 
 def deleteAnswer(request,answer_pk):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     answer = Answer.objects.get(pk=answer_pk)
     question_pk = answer.question_pk()
     question = Question.objects.get(pk=question_pk)
@@ -88,8 +88,8 @@ def deleteAnswer(request,answer_pk):
 
 
 def markAnswerCorrect(request,answer_pk):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     answer = Answer.objects.get(pk=answer_pk)
     answer.correct = True
     answer.save()

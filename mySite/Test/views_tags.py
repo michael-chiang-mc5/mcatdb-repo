@@ -7,8 +7,8 @@ from MCBase.views import *
 from .views_detail import *
 
 def addTag(request,questionContainer_pk):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     text = request.POST.get("tag-text")
     Tag.getTag(text)
     tag = Tag.objects.get(text=text)
@@ -16,8 +16,8 @@ def addTag(request,questionContainer_pk):
     questionContainer.tags.add(tag)
     return editTag(request,questionContainer_pk)
 def removeTag(request,questionContainer_pk):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     text = request.POST.get("tag-text")
     tag = Tag.objects.get(text=text)
     questionContainer = QuestionContainer.objects.get(pk=questionContainer_pk)
@@ -28,8 +28,8 @@ def removeTag(request,questionContainer_pk):
         tag.delete()
     return editTag(request,questionContainer_pk)
 def editTag(request,questionContainer_pk):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     questionContainer = QuestionContainer.objects.get(pk=questionContainer_pk)
     tags = questionContainer.tags.all()
     allTags = Tag.objects.all()

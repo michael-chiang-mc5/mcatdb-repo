@@ -8,8 +8,8 @@ from .views_detail import *
 
 # passage_pk = 0 if question is single
 def addQuestionEditor(request,passage_pk):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:addQuestion')
     form_data = serialize_json({'passage_pk':passage_pk,})
     header = "Add a question"
@@ -17,8 +17,8 @@ def addQuestionEditor(request,passage_pk):
     html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
     return html
 def addQuestion(request):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     # get question text
     form_text = request.POST.get("form-text")
     question = Question(text=form_text)
@@ -41,8 +41,8 @@ def addQuestion(request):
     return recurseQuestionContainerDetail(request, question)
 
 def editQuestionEditor(request,question_pk):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:editQuestion',args=[question_pk])
     form_data = {}
     header = "Edit a question"
@@ -53,8 +53,8 @@ def editQuestionEditor(request,question_pk):
     html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
     return html
 def editQuestion(request,question_pk):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     # get question text
     form_text = request.POST.get("form-text")
     question = Question.objects.get(pk=question_pk)
@@ -64,8 +64,8 @@ def editQuestion(request,question_pk):
     return recurseQuestionContainerDetail(request, question)
 
 def deleteQuestion(request,question_pk):
-    #if not request.user.is_superuser:
-    #    return HttpResponse("You are not a superuser")
+    if not request.user.is_superuser:
+        return HttpResponse("You are not a superuser")
     question = Question.objects.get(pk=question_pk)
     questionContainer_pk = question.questionContainer_pk()
     questionContainer = QuestionContainer.objects.get(pk=questionContainer_pk)
