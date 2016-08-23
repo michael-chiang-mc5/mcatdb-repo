@@ -42,6 +42,8 @@ def admin_questionOfTheDay(request):
     return render(request, 'myContent/admin_questionOfTheDay.html', context)
 
 def adminOptions_questionOfTheDay(request):
+    if not request.user.is_superuser:
+        return HttpResponse("You do not have permission")
     addOrRemove =request.POST.get('addOrRemove')
     questionContainer_pk = request.POST.get('questionContainer_pk')
     order       = request.POST.get('order')
