@@ -7,11 +7,12 @@ from MCBase.views import *
 from .views_detail import *
 
 # passage_pk = 0 if question is single
-def addQuestionEditor(request,passage_pk):
+# is_free_response = 0 if multiple choice
+def addQuestionEditor(request,passage_pk,is_free_response):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
     submit_url = reverse('Test:addQuestion')
-    form_data = serialize_json({'passage_pk':passage_pk,})
+    form_data = serialize_json({'passage_pk':passage_pk,'is_free_response':is_free_response})
     header = "Add a question"
     initial_text = ""
     html = editor(request,submit_url,form_data,header,initial_text) # See MCEditor.views
@@ -19,18 +20,25 @@ def addQuestionEditor(request,passage_pk):
 def addQuestion(request):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
-    # get question text
+    # set question text
     form_text = request.POST.get("form-text")
     question = Question(text=form_text)
-    # get passage corresponding to question
+
+    # set question free response or multiple choice
     serialized_form_data = request.POST.get("serialized-form-data")
     form_data = deserialize_json_string(serialized_form_data)
-    passage_pk = int(form_data["passage_pk"])
+    is_free_response = int(form_data["is_free_response"])
+    if is_free_response==0:
+        question.is_free_response = False
+    else:
+        question.is_free_response = True
     question.save()
 
+    # get passage corresponding to question
     # check if question corresponds to a passage
     # if so, add question to passage
     # otherwise, make sure to create questionContainer
+    passage_pk = int(form_data["passage_pk"])
     if passage_pk != 0:
         passage = Passage.objects.get(pk=passage_pk)
         passage.questions.add(question)

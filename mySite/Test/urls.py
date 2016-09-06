@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^editPassageEditor/(?P<passage_pk>[0-9]+)/$', views.editPassageEditor, name='editPassageEditor'),
 
     # add or edit questions
-    url(r'^addQuestionEditor/(?P<passage_pk>[0-9]+)/$', views.addQuestionEditor, name='addQuestionEditor'),
+    url(r'^addQuestionEditor/(?P<passage_pk>[0-9]+)/(?P<is_free_response>[0-9]+)/$', views.addQuestionEditor, name='addQuestionEditor'),
     url(r'^addQuestion/$', views.addQuestion, name='addQuestion'),
     url(r'^editQuestionEditor/(?P<question_pk>[0-9]+)/$', views.editQuestionEditor, name='editQuestionEditor'),
     url(r'^editQuestion/(?P<question_pk>[0-9]+)/$', views.editQuestion, name='editQuestion'),

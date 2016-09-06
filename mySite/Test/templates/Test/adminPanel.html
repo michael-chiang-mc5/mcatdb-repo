@@ -14,7 +14,9 @@
 
     <a href="{% url 'Test:addPassageEditor' %}">add passage-based questions</a>
     <br />
-    <a href="{% url 'Test:addQuestionEditor' 0 %}">add single question</a>
+    <a href="{% url 'Test:addQuestionEditor' 0 0 %}">add single multiple-choice question</a>
+    <br />
+    <a href="{% url 'Test:addQuestionEditor' 0 1 %}">add single free-response question</a>
     <br />
     <hr />
     <a href="{% url 'Test:questionContainerList' %}">view list</a>

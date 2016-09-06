@@ -1,10 +1,8 @@
-window.fresh = true
 
 // Allow for de-selecting answers, turn selected answers blue
 $(document).ready(function() {
   $('.answer-box').click(function() {
-
-    if (fresh) {
+    if ( !$(this).hasClass("unfresh") ) {
       if ($(this).find('input:radio')[0].checked == true ) {
         $(this).find('input:radio')[0].checked = false;
         $(this).removeClass('selected-answer');
@@ -26,26 +24,52 @@ $(document).ready(function() {
 
     // show comments
     $('.user-comments').show()
+    // disable submit button that was clicked
+    $(this).hide()
 
-    // iterate through questions
-    $(this).parent().children('.question-box').each(function () {
-      var question_box = $(this)
+    // get question_box
+    var question_box = $(this).parent()
 
+
+    // logic for free response submission
+    if ( question_box.hasClass( "free_response" ) ) {
+      var user_answer = question_box.children('textarea').val().trim()
+      // check user answer against correct answers
+      var correct = false
+      question_box.children('.answer-box').each(function() {
+        var answer_text = $(this).children('.text-only').text().trim()
+        if (user_answer == answer_text) {
+          correct = true
+        }
+      });
+      // display whether user is correct/incorrect
+      if (correct) {
+        question_box.children('.header-correct').show()
+      } else {
+        question_box.children('.header-incorrect').show()
+      }
+      // display correct answer
+      var correct_answer = question_box.children('.displayed-answer')
+      correct_answer.show()
+
+
+
+    // logic for multiple choice submission
+    } else if ( question_box.hasClass( "multiple_choice" ) ) {
       // bold correct answers
       question_box.children('.answer-box').each(function() {
         var answer_box = $(this)
+        // disable selecting answers
+        answer_box.addClass( "unfresh" )
         if (answer_box.hasClass('answer-correct')) {
           answer_box.css("font-weight","Bold");
           answer_box.css("font-size","18px");
-
           // mathjax must be set bold separately
           answer_box.find('.math').each(function() {
             $(this).css("font-weight","Bold");
           });
-
         }
       });
-
       // check if an answer is selected
       if (question_box.children('.answer-box').hasClass('selected-answer')) {
         // iterate through answers
@@ -64,13 +88,7 @@ $(document).ready(function() {
         // no answer selected so incorrect
         question_box.children('.header-incorrect').show()
       }
-
-    });
-
-
-    // disable radio buttons, submit buttons
-    $(this).hide()
-    fresh = false
+    }
 
 
   });
@@ -98,6 +116,7 @@ $(document).on('click', "#show-edit-tools", function(){
     $('.admin-tools').show()
     $('.question-box').children('.header-correct').show()
     $('.question-box').children('.header-incorrect').show()
+    $('.question-box').children('.free-response-answer').show()
     $('.explanation').show()
 
   });
@@ -110,6 +129,7 @@ $(document).on('click', "#hide-edit-tools", function(){
     $('.admin-tools').hide()
     $('.question-box').children('.header-correct').hide()
     $('.question-box').children('.header-incorrect').hide()
+    $('.question-box').children('.free-response-answer').hide()
     $('.explanation').hide()
 
   });

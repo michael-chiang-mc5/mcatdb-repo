@@ -101,6 +101,7 @@ class Question(models.Model):
     adminNotes = models.TextField()
     answers  = models.ManyToManyField(Answer, blank=True, related_name="questions")  # to access questions from answer instance, answer.questions.all()
     questionContainer = GenericRelation(QuestionContainer)
+    is_free_response = models.BooleanField(default=False)
 
     def __str__(self):
         return self.text
@@ -128,7 +129,7 @@ class Question(models.Model):
             questionContainer = self.questionContainer.all()[0]
             return questionContainer.pk
     def deepcopy(self):
-        new_question = Question(text=self.text,adminNotes=self.adminNotes)
+        new_question = Question(text=self.text,adminNotes=self.adminNotes,is_free_response=self.is_free_response)
         new_question.save() # saving is necessary to initialize ManyToManyField
         for answer in self.answers.all():
             new_answer = answer.deepcopy()
