@@ -86,11 +86,16 @@ def deleteAnswer(request,answer_pk):
     answer.delete()
     return recurseQuestionContainerDetail(request,question)
 
-
 def markAnswerCorrect(request,answer_pk):
     if not request.user.is_superuser:
         return HttpResponse("You are not a superuser")
+    # mark other answers incorrect
     answer = Answer.objects.get(pk=answer_pk)
+    all_answers = answer.questions.all()[0].answers.all()
+    for a in all_answers:
+        a.correct = False
+        a.save()
+    # mark answer is correct
     answer.correct = True
     answer.save()
     return recurseQuestionContainerDetail(request,answer)
